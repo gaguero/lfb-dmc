@@ -1,0 +1,338 @@
+{
+  "master": {
+    "tasks": [
+      {
+        "id": 1,
+        "title": "Setup Project Repository and Architecture",
+        "description": "Initialize the project repository with React, TypeScript, and Tailwind CSS. Set up the basic folder structure and configuration files.",
+        "details": "1. Create a new React project with TypeScript using Create React App or Next.js\n2. Install and configure Tailwind CSS\n3. Set up ESLint and Prettier for code quality\n4. Create folder structure for components, hooks, contexts, interfaces, and assets\n5. Initialize Git repository\n6. Configure build and deployment scripts\n7. Document the architecture and setup process\n\nFolder structure:\n```\nsrc/\n  components/\n    layout/\n    destinations/\n    navigation/\n    search/\n  contexts/\n  hooks/\n  interfaces/\n  assets/\n    images/\n  styles/\n  utils/\n```",
+        "testStrategy": "Verify project builds successfully without errors. Run linting to ensure code quality standards. Test the basic application renders correctly in development environment. Validate Tailwind CSS is properly configured by testing a simple styled component.",
+        "priority": "high",
+        "dependencies": [],
+        "status": "done",
+        "subtasks": []
+      },
+      {
+        "id": 2,
+        "title": "Define TypeScript Interfaces and Data Structure",
+        "description": "Create TypeScript interfaces for destinations and other data structures. Implement the data model for the 5 Panama destinations.",
+        "details": "1. Define the Destination interface:\n```typescript\ninterface Destination {\n  id: string;\n  name: string;\n  description: string;\n  shortDescription: string;\n  image: string;\n  mobileImage: string;\n  theme: string;\n  primaryActivities: string[];\n  targetDuration: string;\n  keyHighlights: string[];\n}\n```\n\n2. Create interfaces for combined destinations:\n```typescript\ninterface DestinationCombination {\n  primaryDestination: string;\n  selectedDestinations: string[];\n  combinedDescription: string;\n  suggestedDuration: string;\n}\n```\n\n3. Implement data for all 5 destinations (Bocas del Toro, Chiriquí, Las Perlas, Guna Yala, Panama Ciudad) based on the PRD specifications\n4. Create utility functions for destination data manipulation",
+        "testStrategy": "Write unit tests to validate the data structure. Ensure all required fields are present for each destination. Test utility functions with various destination combinations to verify correct behavior.",
+        "priority": "high",
+        "dependencies": [
+          1
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create base TypeScript interfaces file",
+            "description": "Set up a new TypeScript file to define all required interfaces for the destination data structure",
+            "dependencies": [],
+            "details": "Create a new file called 'types.ts' in the appropriate directory. Define the Destination interface exactly as specified in the task description. Also define the DestinationCombination interface. Add JSDoc comments to explain the purpose of each interface and property for better code documentation.\n<info added on 2025-06-26T21:56:58.730Z>\nI've created the file web/src/types/destination.ts with all required TypeScript interfaces:\n\n- Destination interface with all specified properties\n- DestinationCombination interface for destination combinations\n- DestinationState interface for state management\n- DestinationAction type for state actions\n- ContentTemplate interface for dynamic templates\n\nAll interfaces include comprehensive JSDoc documentation. The TypeScript compilation has been verified with no errors using npx tsc --noEmit.\n</info added on 2025-06-26T21:56:58.730Z>",
+            "status": "done",
+            "testStrategy": "Verify the file compiles without TypeScript errors and that all required properties are present in the interfaces."
+          },
+          {
+            "id": 2,
+            "title": "Create destinations data file with structure",
+            "description": "Set up the destinations.ts file with the basic structure to hold the Panama destination data",
+            "dependencies": [],
+            "details": "Create a new file called 'destinations.ts' that imports the interfaces from types.ts. Set up an array of Destination objects that will hold the 5 Panama destinations. Create a named export for this array. Add a placeholder for the destination combinations array that will be implemented later.\n<info added on 2025-06-26T21:57:36.299Z>\nThe destinations.ts file has been successfully created in web/src/data/destinations.ts with the following structure:\n\n- Interfaces are properly imported from types/destination\n- A destinations[] array has been configured with Destination[] type\n- A destinationCombinations[] array has been prepared for future combinations\n- Configuration constants have been added (DEFAULT_DESTINATION_ID, MAX_DESTINATIONS, MIN_DESTINATIONS)\n- Complete JSDoc documentation has been included\n- TypeScript compilation has been verified with no errors\n\nThe file compiles without errors and all exports are ready to receive data.\n</info added on 2025-06-26T21:57:36.299Z>",
+            "status": "done",
+            "testStrategy": "Verify the file compiles without errors and that the structure follows the defined interfaces."
+          },
+          {
+            "id": 3,
+            "title": "Implement data for first three destinations",
+            "description": "Add complete data for Bocas del Toro, Chiriquí, and Las Perlas destinations",
+            "dependencies": [],
+            "details": "Populate the destinations array with detailed information for the first three destinations. For each destination, include all required properties from the Destination interface: id, name, description, shortDescription, image, mobileImage, theme, primaryActivities, targetDuration, and keyHighlights. Use placeholder image URLs that can be updated later. Ensure the data is realistic and matches the PRD specifications.\n<info added on 2025-06-26T21:58:35.806Z>\n✅ COMPLETADO: Se implementaron exitosamente los datos para los primeros tres destinos:\n\n**BOCAS DEL TORO:**\n- ✅ Descripción completa enfocada en experiencia caribeña auténtica\n- ✅ Actividades: Island hopping, snorkel, vida silvestre, deportes acuáticos\n- ✅ Highlights: Red Frog Beach, Bastimentos, Dolphin Bay, cultura Ngöbe\n- ✅ Duración sugerida: 3-5 días\n\n**CHIRIQUÍ:**\n- ✅ Descripción enfocada en montañas, café y aventura\n- ✅ Actividades: Tours de café, senderismo volcán, aguas termales, avistamiento aves  \n- ✅ Highlights: Volcán Barú, Boquete, Quetzal trail, comunidades indígenas\n- ✅ Duración sugerida: 2-4 días\n\n**LAS PERLAS:**\n- ✅ Descripción enfocada en exclusividad y lujo en el Pacífico\n- ✅ Actividades: Island hopping de lujo, pesca, buceo, tours perlicultura\n- ✅ Highlights: Contadora, historia perlas, resorts privados, pesca mundial\n- ✅ Duración sugerida: 3-5 días\n\nCHECKPOINT VISUAL: Todos los destinos compilan sin errores y contienen información realista según especificaciones del PRD\n</info added on 2025-06-26T21:58:35.806Z>",
+            "status": "done",
+            "testStrategy": "Manually verify that all required fields are populated with appropriate content for each destination."
+          },
+          {
+            "id": 4,
+            "title": "Implement data for remaining destinations",
+            "description": "Add complete data for Guna Yala and Panama Ciudad destinations",
+            "dependencies": [],
+            "details": "Complete the destinations array by adding detailed information for the final two destinations: Guna Yala and Panama Ciudad. Follow the same structure as the previous destinations, ensuring all required properties are included with appropriate content. Make sure each destination has a unique ID and theme that reflects its character.\n<info added on 2025-06-26T22:05:07.266Z>\nSuccessfully added complete destination data for Guna Yala and Panama Ciudad\n\nImplementation Details:\n- Guna Yala: Indigenous culture theme with San Blas islands focus, traditional sailing, cultural immersion activities\n- Panama Ciudad: Urban theme with historic/modern blend, Panama Canal, business travel focus\n- Both destinations follow the same data structure as existing destinations\n- All required properties populated: id, name, description, shortDescription, image paths, theme, activities, duration, highlights\n- TypeScript compilation validated - no errors\n\nValidation:\n- TypeScript compilation clean (npx tsc --noEmit)\n- All 5 destinations now complete in destinations array\n- Consistent data structure across all destinations\n- Unique IDs and themes for each destination\n\nReady for next step: Subtask 2.5 - Create utility functions for destination operations\n</info added on 2025-06-26T22:05:07.266Z>",
+            "status": "done",
+            "testStrategy": "Manually verify that all required fields are populated with appropriate content for each destination and that all 5 destinations are now complete."
+          },
+          {
+            "id": 5,
+            "title": "Create utility functions for destination data",
+            "description": "Implement helper functions to manipulate and access destination data",
+            "dependencies": [],
+            "details": "Create a new file called 'destinationUtils.ts' that exports functions for common operations on the destination data. Implement functions such as: getDestinationById, getDestinationsByTheme, combineDestinations (to create a DestinationCombination from selected destinations), and filterDestinationsByActivity. Each function should be properly typed and include error handling for cases like destination not found.\n<info added on 2025-06-26T22:07:08.992Z>\nSuccessfully created comprehensive utility functions for destination data operations\n\n**Implementation Details:**\n- **File Created**: `web/src/utils/destinationUtils.ts` with full TypeScript typing\n- **Core Functions Implemented**:\n  - `getDestinationById()` - Find destination by unique ID with null handling\n  - `getDestinationsByTheme()` - Filter destinations by theme (case-insensitive)\n  - `filterDestinationsByActivity()` - Search destinations by activities\n  - `getDestinationsByIds()` - Bulk destination retrieval with filtering\n  - `combineDestinations()` - Create DestinationCombination objects with validation\n  - `isValidDestinationCombination()` - Validation helper for combinations\n  - `getAllDestinationThemes()` - Extract unique themes from data\n  - `getAllActivities()` - Extract unique activities from all destinations\n\n**Advanced Features**:\n- **Smart Combination Logic**: Generates combined descriptions, calculates duration, merges activities/highlights\n- **Error Handling**: Proper null checks, validation for 1-4 destination limit\n- **Helper Functions**: Private functions for name generation, description combination, duration calculation\n- **Re-exports**: Added to destinations.ts for easy importing throughout app\n\n**TypeScript Validation**:\n- All functions properly typed with return type annotations\n- Interface compliance verified for DestinationCombination\n- Full compilation check passed (`npx tsc --noEmit`)\n- Proper JSDoc documentation for all public functions\n</info added on 2025-06-26T22:07:08.992Z>",
+            "status": "done",
+            "testStrategy": "Write simple test cases for each utility function to verify they return the expected results for various inputs, including edge cases."
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Implement React Context for Global State Management",
+        "description": "Create a React Context to manage the global state for destination selection and combinations.",
+        "details": "1. Create a DestinationContext:\n```typescript\ninterface DestinationContextType {\n  primaryDestination: Destination | null;\n  selectedDestinations: Destination[];\n  setPrimaryDestination: (destination: Destination) => void;\n  addDestination: (destination: Destination) => void;\n  removeDestination: (destinationId: string) => void;\n  clearDestinations: () => void;\n  isDestinationSelected: (destinationId: string) => boolean;\n}\n\nconst DestinationContext = createContext<DestinationContextType | undefined>(undefined);\n```\n\n2. Implement the DestinationProvider component with state management logic\n3. Add validation to prevent selecting more than 4 destinations\n4. Create helper functions for destination operations\n5. Implement hooks for consuming the context (useDestinations, usePrimaryDestination, etc.)",
+        "testStrategy": "Write unit tests for the context provider. Test all state management functions with various scenarios. Verify maximum destination limit is enforced. Test context hooks in isolation to ensure they return the expected values.",
+        "priority": "high",
+        "dependencies": [
+          2
+        ],
+        "status": "done",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create DestinationContext and Types",
+            "description": "Define the TypeScript interfaces and create the React Context for destination management",
+            "dependencies": [],
+            "details": "1. Create a new file `src/context/DestinationContext.tsx`\n2. Define the `Destination` interface if not already defined\n3. Define the `DestinationContextType` interface with all required properties and methods\n4. Create the context using `createContext<DestinationContextType | undefined>(undefined)`\n5. Export the context for later use\n<info added on 2025-06-26T22:08:26.971Z>\n6. Implement the `DestinationProvider` component that will wrap the application\n7. Create state variables using `useState` for `primaryDestination` and `selectedDestinations`\n8. Implement all required state management functions:\n   - `setPrimaryDestination`\n   - `addDestination`\n   - `removeDestination`\n   - `clearDestinations`\n9. Add helper functions:\n   - `isDestinationSelected`\n   - `isMaxDestinationsReached`\n   - `selectedCount`\n10. Provide the context value to children using the Context Provider\n11. Add proper TypeScript typing for the provider component props\n12. Include JSDoc documentation for the component and its functions\n13. Test the provider with React DevTools to ensure proper state management\n</info added on 2025-06-26T22:08:26.971Z>",
+            "status": "done",
+            "testStrategy": "Verify the context is properly defined by importing it in a test file and checking its type. Use TypeScript compiler to validate the interface definitions."
+          },
+          {
+            "id": 2,
+            "title": "Implement DestinationProvider Component",
+            "description": "Create the provider component with state management logic for destinations",
+            "dependencies": [],
+            "details": "1. In the same file, create a `DestinationProvider` component that accepts children props\n2. Implement state variables using `useState` for `primaryDestination` and `selectedDestinations`\n3. Implement the core functions: `setPrimaryDestination`, `addDestination`, `removeDestination`, `clearDestinations`, and `isDestinationSelected`\n4. Add validation logic to prevent selecting more than 4 destinations\n5. Create the context value object containing all state and functions\n6. Return the Provider component wrapping the children with the context value\n<info added on 2025-06-26T22:09:33.172Z>\nSuccessfully implemented DestinationProvider component with comprehensive state management\n\n**Implementation Details:**\n- **Component Created**: `DestinationProvider` functional component with proper TypeScript typing\n- **State Management**: Using React hooks for managing destination state:\n  - `primaryDestination: Destination | null` - Currently selected primary destination\n  - `selectedDestinations: Destination[]` - Array of all selected destinations (max 4)\n\n**Core Functions Implemented**:\n- `setPrimaryDestination()` - Sets primary destination and ensures it's in selection\n- `addDestination()` - Adds destination with max capacity validation (4 destinations)\n- `removeDestination()` - Removes destination and handles primary destination logic\n- `clearDestinations()` - Clears all selections and resets state\n- `isDestinationSelected()` - Checks if specific destination is selected\n\n**Advanced Features**:\n- **Smart Primary Logic**: When setting primary, automatically adds to selection if not present\n- **Capacity Management**: Enforces 4-destination limit with intelligent replacement logic\n- **State Consistency**: When primary is removed, automatically promotes first remaining destination\n- **Performance Optimization**: All functions use `useCallback` for memoization\n- **Computed Properties**: `isMaxDestinationsReached` and `selectedCount` for UI logic\n\n**Validation & Safety**:\n- TypeScript compilation clean (`npx tsc --noEmit`)\n- Proper error handling and validation\n- Console warnings for user feedback on max capacity\n- Comprehensive JSDoc documentation\n</info added on 2025-06-26T22:09:33.172Z>",
+            "status": "done",
+            "testStrategy": "Test the provider by rendering it with React Testing Library and verifying state updates work correctly. Check that validation rules are enforced when attempting to add more than 4 destinations."
+          },
+          {
+            "id": 3,
+            "title": "Create Custom Hooks for Context Consumption",
+            "description": "Develop custom hooks to simplify context consumption throughout the application",
+            "dependencies": [],
+            "details": "1. Create a base `useDestinationContext` hook that validates context existence\n2. Implement specialized hooks:\n   - `useDestinations` - returns the list of selected destinations and related functions\n   - `usePrimaryDestination` - returns the primary destination and setter function\n   - `useDestinationOperations` - returns functions for adding/removing destinations\n3. Add proper error handling for when hooks are used outside the provider\n4. Export all hooks from the context file\n<info added on 2025-06-26T22:14:14.367Z>\nSuccessfully implemented custom hooks for easy React Context consumption in `web/src/contexts/DestinationContext.tsx`. Added three specialized hooks:\n\n1. `useDestination()` - Primary context hook providing access to the complete context interface with proper error handling and TypeScript typing.\n\n2. `useDestinationSelection()` - Specialized hook for destination selection management with functions for adding, removing, toggling, and clearing destinations. Includes helper functions for selection status and capacity validation.\n\n3. `usePrimaryDestination()` - Focused hook for primary destination management with functions to set and check primary destination status.\n\nAll hooks feature performance optimization through useCallback, complete TypeScript typing, descriptive error messages, and granular access patterns. Successfully validated with TypeScript compilation and ready for UI integration.\n</info added on 2025-06-26T22:14:14.367Z>",
+            "status": "done",
+            "testStrategy": "Create test components that use each hook and verify they correctly access context values. Test error cases when hooks are used outside the provider context."
+          },
+          {
+            "id": 4,
+            "title": "Integrate Context Provider with Application",
+            "description": "Wrap the application with the DestinationProvider and update components to use the context",
+            "dependencies": [],
+            "details": "1. In the main application file (e.g., `App.tsx` or `index.tsx`), import the `DestinationProvider`\n2. Wrap the main application component with the provider\n3. Update at least one component to use the context via the custom hooks\n4. Add debugging output (console logs or React DevTools integration) to verify the context is working\n5. Create a simple test UI to demonstrate adding/removing destinations and setting the primary destination",
+            "status": "done",
+            "testStrategy": "Manually test the integration by using the application UI to add and remove destinations. Verify state changes are reflected in the UI and check React DevTools to confirm the context values are updating correctly."
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Create Interactive Destination Navbar",
+        "description": "Transform the current navbar into an interactive destination selector for the 5 Panama destinations.",
+        "status": "done",
+        "dependencies": [
+          3
+        ],
+        "priority": "high",
+        "details": "1. Create a responsive navbar component with destination options\n2. Implement active state styling for the selected destination\n3. Connect navbar to DestinationContext to update primary destination\n4. Add smooth transitions between destination selections\n5. Ensure mobile responsiveness\n\nImplementation completed with the following features:\n- Dynamic dropdown replacing static \"Destinations\" link\n- Integration with `usePrimaryDestination()` hook for state management\n- Visual feedback showing current destination in navbar title with active state styling\n- All 5 destinations included: Bocas del Toro, Chiriquí, Las Perlas, Guna Yala, Panama Ciudad\n- Destination theme display in dropdown for better UX\n- Smooth transitions with rotation and opacity animations\n- Professional styling with ocean blue active states, proper spacing and shadows\n- Full mobile responsiveness",
+        "testStrategy": "Test navbar rendering with all destinations. Verify clicking on destinations updates the context correctly. Test responsive behavior on different screen sizes. Ensure proper visual feedback for active destinations. Validate that the dropdown shows all 5 destinations with their themes. Confirm that selecting a destination updates the navbar title and triggers appropriate UI updates throughout the application.",
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "DestinationProvider Integration",
+            "description": "Wrapped entire app with DestinationProvider in `layout.tsx` to provide global context access with full TypeScript safety.",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 2,
+            "title": "Interactive Destination Navbar Implementation",
+            "description": "Created dynamic dropdown with context integration, visual feedback, and smooth transitions for all 5 Panama destinations.",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 3,
+            "title": "Context-Aware Hero Section",
+            "description": "Implemented dynamic content updates for title, description, and images based on selected destination with smart fallback to Bocas del Toro.",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          },
+          {
+            "id": 4,
+            "title": "User Experience Enhancements",
+            "description": "Added real-time UI updates, visual consistency, accessibility features, and mobile responsiveness throughout the destination selection experience.",
+            "status": "completed",
+            "dependencies": [],
+            "details": "",
+            "testStrategy": ""
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Implement Multi-Select Destination Widget",
+        "description": "Create a multi-select widget in the search area that allows users to combine up to 4 destinations.",
+        "details": "1. Design a dropdown/multi-select component for destination selection\n2. Implement checkbox selection for each destination\n3. Connect to DestinationContext for state management\n4. Add validation to limit selection to maximum 4 destinations\n5. Provide visual feedback for selected destinations\n6. Ensure mobile-friendly interaction\n\n```typescript\nconst DestinationMultiSelect: React.FC = () => {\n  const { \n    selectedDestinations, \n    addDestination, \n    removeDestination, \n    isDestinationSelected,\n    destinations \n  } = useDestinations();\n  \n  const handleToggleDestination = (destination: Destination) => {\n    if (isDestinationSelected(destination.id)) {\n      removeDestination(destination.id);\n    } else if (selectedDestinations.length < 4) {\n      addDestination(destination);\n    }\n  };\n  \n  return (\n    <div className=\"destination-multi-select\">\n      <h3>Combine destinations (max 4)</h3>\n      <div className=\"destination-options\">\n        {destinations.map((destination) => (\n          <label key={destination.id} className=\"flex items-center space-x-2\">\n            <input\n              type=\"checkbox\"\n              checked={isDestinationSelected(destination.id)}\n              onChange={() => handleToggleDestination(destination)}\n              disabled={!isDestinationSelected(destination.id) && selectedDestinations.length >= 4}\n            />\n            <span>{destination.name}</span>\n          </label>\n        ))}\n      </div>\n    </div>\n  );\n};\n```",
+        "testStrategy": "Test multi-select widget with various selection scenarios. Verify maximum selection limit is enforced. Test mobile interactions with touch events. Ensure proper visual feedback for selected and disabled options.",
+        "priority": "high",
+        "dependencies": [
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 6,
+        "title": "Develop Dynamic Hero Section with Adaptive Content",
+        "description": "Create a hero section that dynamically updates title, description, and images based on selected destinations.",
+        "details": "1. Design a responsive hero component with title, description, and image areas\n2. Connect to DestinationContext to access selected destinations\n3. Implement dynamic title generation based on primary destination\n4. Create a responsive image grid that adapts to the number of selected destinations\n5. Add smooth transitions for content changes\n\n```typescript\nconst HeroSection: React.FC = () => {\n  const { primaryDestination, selectedDestinations } = useDestinations();\n  const { combinedDescription } = useDestinationContent();\n  \n  // Calculate grid layout based on number of destinations\n  const gridClass = {\n    1: 'grid-cols-1',\n    2: 'grid-cols-2',\n    3: 'grid-cols-3',\n    4: 'grid-cols-2 md:grid-cols-4'\n  }[selectedDestinations.length] || 'grid-cols-1';\n  \n  return (\n    <section className=\"hero-section\">\n      <h1 className=\"hero-title text-4xl md:text-6xl font-bold mb-4 transition-all\">\n        {primaryDestination ? `Discover ${primaryDestination.name}` : 'Discover Panama'}\n      </h1>\n      \n      <p className=\"hero-description mb-6 transition-all\">\n        {combinedDescription}\n      </p>\n      \n      <div className={`hero-images grid ${gridClass} gap-2 transition-all`}>\n        {selectedDestinations.map((destination) => (\n          <div key={destination.id} className=\"hero-image-container overflow-hidden rounded-lg\">\n            <img \n              src={destination.image} \n              alt={destination.name} \n              className=\"w-full h-full object-cover transition-transform hover:scale-105\"\n            />\n          </div>\n        ))}\n      </div>\n    </section>\n  );\n};\n```",
+        "testStrategy": "Test hero section with different destination combinations. Verify title and description update correctly. Test responsive image grid with 1-4 destinations. Ensure smooth transitions between content changes. Test on various screen sizes.",
+        "priority": "high",
+        "dependencies": [
+          3,
+          4,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 7,
+        "title": "Implement Smart Content Generation System",
+        "description": "Develop a system for intelligently combining destination content based on selected destinations.",
+        "details": "1. Create a content generation service with templates for different destination combinations\n2. Implement logic to merge descriptions based on selected destinations\n3. Add duration calculation based on number and type of destinations\n4. Highlight complementary activities across selected destinations\n5. Create a custom hook for accessing combined content\n\n```typescript\nconst useDestinationContent = () => {\n  const { primaryDestination, selectedDestinations } = useDestinations();\n  \n  // Generate combined description based on selected destinations\n  const combinedDescription = useMemo(() => {\n    if (!primaryDestination) return '';\n    if (selectedDestinations.length === 1) return primaryDestination.description;\n    \n    // For multiple destinations, create a combined narrative\n    const destinationNames = selectedDestinations.map(d => d.name).join(', ');\n    const primaryTheme = primaryDestination.theme;\n    const activities = selectedDestinations\n      .flatMap(d => d.primaryActivities)\n      .filter((v, i, a) => a.indexOf(v) === i)\n      .slice(0, 3)\n      .join(', ');\n    \n    return `Experience the best of ${destinationNames} in one unforgettable journey. From ${primaryTheme} to diverse adventures including ${activities}, this multi-destination experience showcases Panama's incredible diversity.`;\n  }, [primaryDestination, selectedDestinations]);\n  \n  // Calculate suggested duration\n  const suggestedDuration = useMemo(() => {\n    const totalDays = selectedDestinations.reduce((sum, dest) => {\n      const days = parseInt(dest.targetDuration.split('-')[0]);\n      return sum + days;\n    }, 0);\n    \n    return `${totalDays}-${totalDays + selectedDestinations.length} days`;\n  }, [selectedDestinations]);\n  \n  return { combinedDescription, suggestedDuration };\n};\n```",
+        "testStrategy": "Test content generation with various destination combinations. Verify descriptions are properly merged and make sense. Test duration calculations with different destination sets. Ensure content is neutral and focuses on experiences rather than vendors.",
+        "priority": "medium",
+        "dependencies": [
+          2,
+          3
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 8,
+        "title": "Create Adaptive Image Layout System",
+        "description": "Implement a responsive image grid that adapts to the number of selected destinations with optimized loading.",
+        "details": "1. Create a component for adaptive image layouts\n2. Implement different grid layouts based on number of destinations (1-4)\n3. Add image optimization with responsive sizes\n4. Implement lazy loading for performance\n5. Add smooth transitions between layout changes\n\n```typescript\nconst AdaptiveImageGrid: React.FC = () => {\n  const { selectedDestinations } = useDestinations();\n  \n  // Determine grid layout based on number of destinations\n  const getGridLayout = () => {\n    switch(selectedDestinations.length) {\n      case 1:\n        return 'grid-cols-1';\n      case 2:\n        return 'grid-cols-1 md:grid-cols-2';\n      case 3:\n        return 'grid-cols-1 md:grid-cols-3';\n      case 4:\n        return 'grid-cols-2 md:grid-cols-4';\n      default:\n        return 'grid-cols-1';\n    }\n  };\n  \n  return (\n    <div className={`grid ${getGridLayout()} gap-4 transition-all duration-300`}>\n      {selectedDestinations.map((destination) => (\n        <div key={destination.id} className=\"overflow-hidden rounded-lg aspect-video\">\n          <img\n            src={destination.image}\n            srcSet={`${destination.image} 1x, ${destination.image.replace('.jpg', '@2x.jpg')} 2x`}\n            alt={destination.name}\n            loading=\"lazy\"\n            className=\"w-full h-full object-cover transition-transform duration-500 hover:scale-105\"\n          />\n        </div>\n      ))}\n    </div>\n  );\n};\n```",
+        "testStrategy": "Test image grid with different numbers of destinations. Verify responsive behavior on various screen sizes. Test lazy loading functionality. Measure performance metrics for image loading. Ensure smooth transitions between layout changes.",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          6
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 9,
+        "title": "Implement Search Widget with Destination Awareness",
+        "description": "Create a search widget that reflects current destination selections and allows users to search for specific experiences.",
+        "details": "1. Design a search component that displays selected destinations\n2. Integrate with the multi-select destination widget\n3. Add search functionality for activities and experiences\n4. Implement responsive design for mobile devices\n5. Connect to DestinationContext for state awareness\n\n```typescript\nconst SearchWidget: React.FC = () => {\n  const { primaryDestination, selectedDestinations } = useDestinations();\n  const { suggestedDuration } = useDestinationContent();\n  const [searchQuery, setSearchQuery] = useState('');\n  \n  const handleSearch = (e: React.FormEvent) => {\n    e.preventDefault();\n    // Search implementation would go here\n    console.log('Searching for:', searchQuery, 'in destinations:', selectedDestinations.map(d => d.name));\n  };\n  \n  return (\n    <div className=\"search-widget bg-white rounded-lg shadow-lg p-4\">\n      <div className=\"selected-destinations mb-4\">\n        <h3 className=\"font-bold text-lg\">Your Panama Experience</h3>\n        <div className=\"flex flex-wrap gap-2 mt-2\">\n          {selectedDestinations.map(destination => (\n            <span key={destination.id} className=\"px-3 py-1 bg-blue-100 rounded-full text-sm\">\n              {destination.name}\n            </span>\n          ))}\n        </div>\n        <p className=\"text-sm mt-2\">Suggested duration: {suggestedDuration}</p>\n      </div>\n      \n      <form onSubmit={handleSearch} className=\"flex flex-col md:flex-row gap-2\">\n        <input\n          type=\"text\"\n          placeholder=\"Search activities or experiences\"\n          value={searchQuery}\n          onChange={(e) => setSearchQuery(e.target.value)}\n          className=\"flex-grow px-4 py-2 border rounded-lg\"\n        />\n        <button type=\"submit\" className=\"px-6 py-2 bg-blue-600 text-white rounded-lg\">\n          Search\n        </button>\n      </form>\n      \n      <div className=\"mt-4\">\n        <DestinationMultiSelect />\n      </div>\n    </div>\n  );\n};\n```",
+        "testStrategy": "Test search widget with various destination selections. Verify search functionality works correctly. Test responsive behavior on mobile devices. Ensure selected destinations are properly displayed. Test integration with multi-select widget.",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          5
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 10,
+        "title": "Develop Custom Hooks for Destination Logic",
+        "description": "Create custom React hooks to encapsulate destination selection logic and content generation.",
+        "details": "1. Implement useDestinations hook for accessing destination context\n2. Create useDestinationContent hook for smart content generation\n3. Develop useDestinationImages hook for image handling\n4. Implement useDestinationNavigation for navigation logic\n\n```typescript\n// useDestinations hook\nconst useDestinations = () => {\n  const context = useContext(DestinationContext);\n  if (!context) {\n    throw new Error('useDestinations must be used within a DestinationProvider');\n  }\n  return context;\n};\n\n// useDestinationNavigation hook\nconst useDestinationNavigation = () => {\n  const { setPrimaryDestination, destinations } = useDestinations();\n  \n  const navigateToDestination = useCallback((destinationId: string) => {\n    const destination = destinations.find(d => d.id === destinationId);\n    if (destination) {\n      setPrimaryDestination(destination);\n      // Could also handle URL updates here if using a router\n    }\n  }, [destinations, setPrimaryDestination]);\n  \n  return { navigateToDestination };\n};\n\n// useDestinationImages hook\nconst useDestinationImages = () => {\n  const { selectedDestinations } = useDestinations();\n  \n  const getOptimizedImageUrl = useCallback((destination: Destination, size: 'small' | 'medium' | 'large') => {\n    const sizeMap = {\n      small: '400w',\n      medium: '800w',\n      large: '1200w'\n    };\n    return `${destination.image.replace('.jpg', `-${sizeMap[size]}.jpg`)}`;\n  }, []);\n  \n  return { getOptimizedImageUrl };\n};\n```",
+        "testStrategy": "Write unit tests for each custom hook. Test hooks with various input scenarios. Verify hooks return expected values. Test error handling for invalid inputs or missing context.",
+        "priority": "medium",
+        "dependencies": [
+          3,
+          7
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 11,
+        "title": "Implement Responsive Mobile Experience",
+        "description": "Optimize the multi-destination experience for mobile devices with touch-friendly interactions.",
+        "details": "1. Create mobile-specific components and layouts\n2. Implement touch-friendly interactions for destination selection\n3. Optimize multi-select widget for touch devices\n4. Add mobile-specific animations and transitions\n5. Test and refine on various mobile devices\n\n```typescript\n// Mobile-optimized multi-select component\nconst MobileDestinationSelect: React.FC = () => {\n  const { selectedDestinations, addDestination, removeDestination, destinations } = useDestinations();\n  const [isOpen, setIsOpen] = useState(false);\n  \n  return (\n    <div className=\"mobile-destination-select md:hidden\">\n      <button \n        onClick={() => setIsOpen(!isOpen)}\n        className=\"w-full py-3 px-4 bg-gray-100 rounded-lg flex justify-between items-center\"\n      >\n        <span>Select destinations ({selectedDestinations.length}/4)</span>\n        <svg className={`transform transition-transform ${isOpen ? 'rotate-180' : ''}`} width=\"12\" height=\"8\" viewBox=\"0 0 12 8\">\n          <path d=\"M1 1L6 6L11 1\" stroke=\"currentColor\" strokeWidth=\"2\" fill=\"none\" />\n        </svg>\n      </button>\n      \n      {isOpen && (\n        <div className=\"mt-2 bg-white rounded-lg shadow-lg p-4 border border-gray-200\">\n          {destinations.map(destination => {\n            const isSelected = selectedDestinations.some(d => d.id === destination.id);\n            return (\n              <div key={destination.id} className=\"py-2 border-b border-gray-100 last:border-0\">\n                <button\n                  className={`w-full text-left py-2 px-3 rounded-lg ${isSelected ? 'bg-blue-100' : ''}`}\n                  onClick={() => {\n                    if (isSelected) {\n                      removeDestination(destination.id);\n                    } else if (selectedDestinations.length < 4) {\n                      addDestination(destination);\n                    }\n                  }}\n                  disabled={!isSelected && selectedDestinations.length >= 4}\n                >\n                  <div className=\"flex items-center\">\n                    <div className={`w-5 h-5 rounded-full border ${isSelected ? 'bg-blue-500 border-blue-500' : 'border-gray-400'} mr-3 flex items-center justify-center`}>\n                      {isSelected && <span className=\"text-white text-xs\">✓</span>}\n                    </div>\n                    <span>{destination.name}</span>\n                  </div>\n                </button>\n              </div>\n            );\n          })}\n        </div>\n      )}\n    </div>\n  );\n};\n```",
+        "testStrategy": "Test on various mobile devices and screen sizes. Verify touch interactions work correctly. Test performance on lower-end devices. Ensure all features are accessible on mobile. Validate responsive layouts adapt correctly to different screen orientations.",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5,
+          9
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 12,
+        "title": "Implement Performance Optimizations",
+        "description": "Optimize performance with image lazy loading, code splitting, and efficient state updates.",
+        "details": "1. Implement React.lazy and Suspense for component code splitting\n2. Add image lazy loading and optimization\n3. Implement useMemo and useCallback for performance-critical functions\n4. Add debouncing for frequent state updates\n5. Optimize re-renders with React.memo\n\n```typescript\n// Lazy loading components\nconst LazyDestinationDetail = React.lazy(() => import('./DestinationDetail'));\n\n// Optimized component with memoization\nconst DestinationCard = React.memo(({ destination }: { destination: Destination }) => {\n  return (\n    <div className=\"destination-card\">\n      <img \n        src={destination.image} \n        alt={destination.name} \n        loading=\"lazy\" \n        width=\"400\" \n        height=\"300\"\n      />\n      <h3>{destination.name}</h3>\n      <p>{destination.shortDescription}</p>\n    </div>\n  );\n});\n\n// Debounced search input\nconst SearchInput: React.FC<{ onSearch: (query: string) => void }> = ({ onSearch }) => {\n  const [inputValue, setInputValue] = useState('');\n  \n  const debouncedSearch = useCallback(\n    debounce((query: string) => {\n      onSearch(query);\n    }, 300),\n    [onSearch]\n  );\n  \n  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {\n    const value = e.target.value;\n    setInputValue(value);\n    debouncedSearch(value);\n  };\n  \n  return (\n    <input\n      type=\"text\"\n      value={inputValue}\n      onChange={handleChange}\n      placeholder=\"Search...\"\n      className=\"search-input\"\n    />\n  );\n};\n```",
+        "testStrategy": "Measure performance metrics before and after optimizations. Test lazy loading behavior. Verify image loading performance. Measure time to interactive on various devices. Test with performance profiling tools in Chrome DevTools.",
+        "priority": "medium",
+        "dependencies": [
+          6,
+          8
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 13,
+        "title": "Implement Animation and Transition System",
+        "description": "Create smooth animations and transitions for destination changes and content updates.",
+        "details": "1. Implement CSS transitions for content changes\n2. Add animation hooks for React components\n3. Create transition components for destination switching\n4. Optimize animations for performance\n5. Ensure animations work well on mobile devices\n\n```typescript\n// Transition component for content changes\nconst ContentTransition: React.FC<{ children: React.ReactNode }> = ({ children }) => {\n  return (\n    <div className=\"transition-opacity duration-300 ease-in-out\">\n      {children}\n    </div>\n  );\n};\n\n// Animation hook for fade effects\nconst useFadeAnimation = () => {\n  const [isVisible, setIsVisible] = useState(false);\n  const nodeRef = useRef(null);\n  \n  useEffect(() => {\n    setIsVisible(true);\n    return () => setIsVisible(false);\n  }, []);\n  \n  return {\n    nodeRef,\n    fadeProps: {\n      classNames: 'fade',\n      timeout: 300,\n      in: isVisible,\n      unmountOnExit: true\n    }\n  };\n};\n\n// Animated destination change\nconst AnimatedDestinationContent: React.FC = () => {\n  const { primaryDestination } = useDestinations();\n  const [prevDestination, setPrevDestination] = useState(primaryDestination);\n  const [isTransitioning, setIsTransitioning] = useState(false);\n  \n  useEffect(() => {\n    if (primaryDestination?.id !== prevDestination?.id) {\n      setIsTransitioning(true);\n      const timer = setTimeout(() => {\n        setPrevDestination(primaryDestination);\n        setIsTransitioning(false);\n      }, 300);\n      return () => clearTimeout(timer);\n    }\n  }, [primaryDestination, prevDestination]);\n  \n  return (\n    <div className={`transition-all duration-300 ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>\n      {/* Content based on prevDestination */}\n      <h2>{prevDestination?.name}</h2>\n      <p>{prevDestination?.description}</p>\n    </div>\n  );\n};\n```",
+        "testStrategy": "Test animations on various devices and browsers. Measure animation performance. Verify transitions work correctly during destination changes. Test animation behavior on low-end devices. Ensure animations don't interfere with accessibility.",
+        "priority": "low",
+        "dependencies": [
+          6,
+          8,
+          12
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 14,
+        "title": "Implement Accessibility Compliance",
+        "description": "Ensure the application meets WCAG AA accessibility standards with proper semantic markup and keyboard navigation.",
+        "details": "1. Add proper ARIA attributes to interactive elements\n2. Implement keyboard navigation for all interactive components\n3. Ensure proper color contrast for text elements\n4. Add screen reader support with descriptive alt text\n5. Test with accessibility tools and screen readers\n\n```typescript\n// Accessible multi-select component\nconst AccessibleMultiSelect: React.FC = () => {\n  const { selectedDestinations, addDestination, removeDestination, isDestinationSelected, destinations } = useDestinations();\n  const [isExpanded, setIsExpanded] = useState(false);\n  \n  const toggleExpanded = () => setIsExpanded(!isExpanded);\n  \n  const handleKeyDown = (e: React.KeyboardEvent, destination: Destination) => {\n    if (e.key === 'Enter' || e.key === ' ') {\n      e.preventDefault();\n      handleToggleDestination(destination);\n    }\n  };\n  \n  const handleToggleDestination = (destination: Destination) => {\n    if (isDestinationSelected(destination.id)) {\n      removeDestination(destination.id);\n    } else if (selectedDestinations.length < 4) {\n      addDestination(destination);\n    }\n  };\n  \n  return (\n    <div className=\"accessible-multi-select\">\n      <button\n        aria-expanded={isExpanded}\n        aria-controls=\"destination-options\"\n        onClick={toggleExpanded}\n        className=\"select-button\"\n      >\n        Select destinations ({selectedDestinations.length}/4)\n      </button>\n      \n      <div \n        id=\"destination-options\"\n        className={`options-container ${isExpanded ? 'visible' : 'hidden'}`}\n        role=\"listbox\"\n        aria-multiselectable=\"true\"\n      >\n        {destinations.map((destination) => {\n          const isSelected = isDestinationSelected(destination.id);\n          const isDisabled = !isSelected && selectedDestinations.length >= 4;\n          \n          return (\n            <div \n              key={destination.id}\n              role=\"option\"\n              aria-selected={isSelected}\n              tabIndex={isDisabled ? -1 : 0}\n              onClick={() => !isDisabled && handleToggleDestination(destination)}\n              onKeyDown={(e) => !isDisabled && handleKeyDown(e, destination)}\n              className={`option ${isSelected ? 'selected' : ''} ${isDisabled ? 'disabled' : ''}`}\n              aria-disabled={isDisabled}\n            >\n              <span className=\"visually-hidden\">{isSelected ? 'Selected' : 'Not selected'}</span>\n              {destination.name}\n            </div>\n          );\n        })}\n      </div>\n    </div>\n  );\n};\n```",
+        "testStrategy": "Test with accessibility tools like axe or Lighthouse. Verify keyboard navigation works for all interactive elements. Test with screen readers. Ensure color contrast meets WCAG AA standards. Validate semantic HTML structure.",
+        "priority": "medium",
+        "dependencies": [
+          4,
+          5,
+          9,
+          11
+        ],
+        "status": "pending",
+        "subtasks": []
+      },
+      {
+        "id": 15,
+        "title": "Implement Analytics and Performance Monitoring",
+        "description": "Add analytics tracking and performance monitoring to measure user engagement and system performance.",
+        "details": "1. Implement Google Analytics or similar tracking\n2. Add custom events for destination selections and combinations\n3. Track performance metrics (page load, destination switching time)\n4. Set up error tracking and reporting\n5. Create a performance dashboard for monitoring\n\n```typescript\n// Analytics service\nconst AnalyticsService = {\n  trackPageView: (page: string) => {\n    // Implementation would depend on analytics provider\n    console.log(`Page view: ${page}`);\n    // window.gtag('config', 'GA-ID', { page_path: page });\n  },\n  \n  trackEvent: (category: string, action: string, label?: string, value?: number) => {\n    console.log(`Event: ${category} - ${action} - ${label} - ${value}`);\n    // window.gtag('event', action, { event_category: category, event_label: label, value });\n  },\n  \n  trackDestinationSelection: (destinationId: string, isMultiSelect: boolean) => {\n    AnalyticsService.trackEvent(\n      'Destination', \n      isMultiSelect ? 'AddToMultiSelect' : 'PrimarySelection', \n      destinationId\n    );\n  },\n  \n  trackPerformance: (metric: string, value: number) => {\n    AnalyticsService.trackEvent('Performance', metric, undefined, value);\n  }\n};\n\n// Performance monitoring hook\nconst usePerformanceMonitoring = () => {\n  useEffect(() => {\n    // Track page load time\n    if (window.performance) {\n      const pageLoadTime = window.performance.timing.domContentLoadedEventEnd - \n                          window.performance.timing.navigationStart;\n      AnalyticsService.trackPerformance('pageLoadTime', pageLoadTime);\n    }\n    \n    // Set up performance observer for metrics\n    if ('PerformanceObserver' in window) {\n      const observer = new PerformanceObserver((list) => {\n        for (const entry of list.getEntries()) {\n          AnalyticsService.trackPerformance(entry.name, entry.duration);\n        }\n      });\n      observer.observe({ entryTypes: ['measure'] });\n      return () => observer.disconnect();\n    }\n  }, []);\n  \n  // Function to measure component performance\n  const measurePerformance = useCallback((name: string, callback: () => void) => {\n    performance.mark(`${name}-start`);\n    callback();\n    performance.mark(`${name}-end`);\n    performance.measure(name, `${name}-start`, `${name}-end`);\n  }, []);\n  \n  return { measurePerformance };\n};\n```",
+        "testStrategy": "Verify analytics events are properly tracked. Test performance measurements with various scenarios. Ensure error tracking captures and reports issues. Validate that all key user interactions are tracked. Test dashboard with sample data.",
+        "priority": "low",
+        "dependencies": [
+          12
+        ],
+        "status": "pending",
+        "subtasks": []
+      }
+    ],
+    "metadata": {
+      "created": "2025-06-26T21:53:15.059Z",
+      "updated": "2025-06-26T22:17:29.212Z",
+      "description": "Tasks for master context"
+    }
+  }
+}
