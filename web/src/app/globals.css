@@ -1,0 +1,53 @@
+@import "tailwindcss";
+
+@theme {
+  /* Local From Bocas DMC Brand Colors */
+  --color-ocean-blue: #8CC4D8;
+  --color-sand-ivory: #F4EDDD;
+  --color-coral-pink: #F08E80;
+  --color-driftwood-brown: #7C756D;
+  --color-deep-cacao: #675F59;
+  
+  /* Additional brand variations */
+  --color-primary: #F08E80; /* Coral Pink for CTAs */
+  --color-secondary: #8CC4D8; /* Ocean Blue for accents */
+  --color-background: #F4EDDD; /* Sand Ivory for backgrounds */
+  --color-text: #7C756D; /* Driftwood Brown for text */
+  --color-text-dark: #675F59; /* Deep Cacao for headings */
+  
+  /* Typography - Epilogue and Karla fonts */
+  --font-family-display: var(--font-epilogue), sans-serif; /* For headings */
+  --font-family-sans: var(--font-karla), sans-serif; /* For body text */
+  
+  /* Custom Border Radius for brand styling */
+  --radius-pill: 999px; /* Pill-shaped buttons */
+  --radius-card: 8px; /* Cards */
+  --radius-field: 24px; /* Form fields (capsule) */
+}
+
+body {
+  background-color: var(--color-sand-ivory);
+  color: var(--color-driftwood-brown);
+  font-family: var(--font-family-sans);
+}
+
+/* Ensure proper stacking context */
+main {
+  position: relative;
+  z-index: 1;
+}
+
+/* Prevent any unwanted image overflow */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Hide scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
