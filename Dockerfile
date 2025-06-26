@@ -29,4 +29,4 @@ ENV PORT=3000
 EXPOSE $PORT
 
 # Define the command to run the application
-CMD ["sh", "-c", "node_modules/.bin/next start -p $PORT"] 
+CMD ["npm", "start"] 

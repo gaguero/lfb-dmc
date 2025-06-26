@@ -16,17 +16,17 @@ const Navbar = () => {
           {/* Logo - Izquierda */}
           <div className="flex-shrink-0">
             <Image 
-              src="/lfb-logo recortado.png" 
+              src="/lfb-logo - vertical just tex.png" 
               alt="Local From Bocas" 
               width={160}
               height={20}
-              className="h-5 w-40" 
+              className="h-5 w-30" 
               priority={true}
             />
           </div>
           
           {/* Navegación Central - Destinos */}
-          <nav className="flex-1 flex justify-center pt-6">
+          <nav className="flex-1 flex justify-center pt-1">
             <div className="flex items-center bg-white rounded-full px-6 py-3 shadow-lg">
               <div className="flex items-center space-x-4 text-sm font-medium">
                 {destinations.map((destination) => (
