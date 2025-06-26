@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import { User } from 'lucide-react';
 import { usePrimaryDestination } from '@/contexts/DestinationContext';
 import { destinations } from '@/data/destinations';
@@ -14,7 +15,14 @@ const Navbar = () => {
         <div className="flex items-center justify-between w-full">
           {/* Logo - Izquierda */}
           <div className="flex-shrink-0">
-            <img src="/lfb-logo recortado.png" alt="Local From Bocas" className="h-5 w-40" />
+            <Image 
+              src="/lfb-logo recortado.png" 
+              alt="Local From Bocas" 
+              width={160}
+              height={20}
+              className="h-5 w-40" 
+              priority={true}
+            />
           </div>
           
           {/* Navegación Central - Destinos */}

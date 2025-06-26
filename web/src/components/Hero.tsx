@@ -1,7 +1,8 @@
 'use client';
 
 import React from 'react';
-import { MapPin, Calendar, Users, Search } from 'lucide-react';
+import Image from 'next/image';
+import { MapPin, Calendar, Search } from 'lucide-react';
 import { usePrimaryDestination } from '@/contexts/DestinationContext';
 import { destinations } from '@/data/destinations';
 
@@ -42,10 +43,15 @@ const Hero = () => {
         {/* Hero Image with Search Widget */}
         <div className="relative">
           <div className="h-96 lg:h-[400px] w-full rounded-3xl overflow-hidden shadow-2xl">
-            <img 
+            <Image 
               src={currentDestination.image} 
               alt={`${currentDestination.name} - ${currentDestination.theme}`}
+              width={1200}
+              height={400}
               className="w-full h-full object-cover"
+              priority={true}
+              placeholder="blur"
+              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
             />
           </div>
 

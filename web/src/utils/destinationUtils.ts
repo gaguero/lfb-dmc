@@ -104,25 +104,7 @@ export function combineDestinations(
   };
 }
 
-/**
- * Generate a name for a destination combination
- * @param destinations - Array of destination objects
- * @returns Generated combination name
- */
-function generateCombinationName(destinations: Destination[]): string {
-  if (destinations.length === 1) {
-    return destinations[0].name;
-  }
-  
-  if (destinations.length === 2) {
-    return `${destinations[0].name} & ${destinations[1].name}`;
-  }
-  
-  const lastDestination = destinations[destinations.length - 1];
-  const otherDestinations = destinations.slice(0, -1);
-  
-  return `${otherDestinations.map(d => d.name).join(', ')} & ${lastDestination.name}`;
-}
+
 
 /**
  * Generate a combined description for multiple destinations
