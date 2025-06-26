@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package*.json ./
 COPY web/package*.json ./web/
 
-# Install dependencies
+# Install dependencies for root
 RUN npm install
 
 # Copy the entire project
@@ -21,8 +21,12 @@ RUN npm install
 # Build the Next.js application
 RUN npm run build
 
+# Set environment variables
+ENV NODE_ENV=production
+ENV PORT=3000
+
 # Expose the port the app runs on
-EXPOSE 3000
+EXPOSE $PORT
 
 # Define the command to run the application
-CMD ["npm", "start"] 
+CMD ["sh", "-c", "node_modules/.bin/next start -p $PORT"] 
