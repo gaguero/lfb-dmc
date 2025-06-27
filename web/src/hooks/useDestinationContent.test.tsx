@@ -10,7 +10,7 @@ const mockDestinations = destinations;
 jest.mock('../contexts/DestinationContext', () => ({
   __esModule: true,
   ...jest.requireActual('../contexts/DestinationContext'), // import and retain default exports
-  useDestinations: jest.fn(),
+  useDestination: jest.fn(),
 }));
 
 const wrapper = ({ children }: { children: ReactNode }) => (
@@ -20,64 +20,94 @@ const wrapper = ({ children }: { children: ReactNode }) => (
 );
 
 describe('useDestinationContent', () => {
-  const mockedUseDestinations = DestinationContext.useDestinations as jest.Mock;
+  let mockUseDestination: jest.MockedFunction<typeof DestinationContext.useDestination>;
 
   beforeEach(() => {
-    // Reset mocks before each test
-    mockedUseDestinations.mockClear();
+    mockUseDestination = DestinationContext.useDestination as jest.MockedFunction<typeof DestinationContext.useDestination>;
   });
 
   it('should return default content when no destination is selected', () => {
-    mockedUseDestinations.mockReturnValue({
-      primaryDestination: mockDestinations[0],
+    mockUseDestination.mockReturnValue({
+      primaryDestination: null,
       selectedDestinations: [],
+      setPrimaryDestination: jest.fn(),
+      addDestination: jest.fn(),
+      removeDestination: jest.fn(),
+      clearDestinations: jest.fn(),
+      isDestinationSelected: jest.fn(),
+      isMaxDestinationsReached: false,
+      selectedCount: 0,
     });
 
     const { result } = renderHook(() => useDestinationContent(), { wrapper });
-
-    expect(result.current.combinedDescription).toBe(mockDestinations[0].description);
-    expect(result.current.suggestedDuration).toBe(mockDestinations[0].targetDuration);
+    
+    expect(result.current.combinedDescription).toBe('');
+    expect(result.current.suggestedDuration).toBe('3-5 days');
   });
 
-  it('should return content for a single selected destination', () => {
-    mockedUseDestinations.mockReturnValue({
-      primaryDestination: mockDestinations[0],
-      selectedDestinations: [mockDestinations[0]],
+  it('should return single destination content when one destination is selected', () => {
+    const bocasDelToro = mockDestinations[0];
+    
+    mockUseDestination.mockReturnValue({
+      primaryDestination: bocasDelToro,
+      selectedDestinations: [bocasDelToro],
+      setPrimaryDestination: jest.fn(),
+      addDestination: jest.fn(),
+      removeDestination: jest.fn(),
+      clearDestinations: jest.fn(),
+      isDestinationSelected: jest.fn(),
+      isMaxDestinationsReached: false,
+      selectedCount: 1,
     });
 
     const { result } = renderHook(() => useDestinationContent(), { wrapper });
-
-    expect(result.current.combinedDescription).toBe(mockDestinations[0].description);
+    
+    expect(result.current.combinedDescription).toBe(bocasDelToro.description);
+    expect(result.current.suggestedDuration).toBe('3-5 days');
   });
 
-  it('should generate combined content for multiple destinations', () => {
-    const selected = [mockDestinations[0], mockDestinations[1]];
-    mockedUseDestinations.mockReturnValue({
-      primaryDestination: mockDestinations[0],
-      selectedDestinations: selected,
+  it('should return combined content when multiple destinations are selected', () => {
+    const bocasDelToro = mockDestinations[0];
+    const sanBlas = mockDestinations[1];
+    
+    mockUseDestination.mockReturnValue({
+      primaryDestination: bocasDelToro,
+      selectedDestinations: [bocasDelToro, sanBlas],
+      setPrimaryDestination: jest.fn(),
+      addDestination: jest.fn(),
+      removeDestination: jest.fn(),
+      clearDestinations: jest.fn(),
+      isDestinationSelected: jest.fn(),
+      isMaxDestinationsReached: false,
+      selectedCount: 2,
     });
 
     const { result } = renderHook(() => useDestinationContent(), { wrapper });
-
-    expect(result.current.combinedDescription).toContain(mockDestinations[0].name);
-    expect(result.current.combinedDescription).toContain(mockDestinations[1].name);
-    expect(result.current.combinedDescription).toContain('unforgettable journey');
+    
+    expect(result.current.combinedDescription).toContain(bocasDelToro.name);
+    expect(result.current.combinedDescription).toContain(sanBlas.name);
+    expect(result.current.suggestedDuration).toBe('5-7 days');
   });
 
-  it('should calculate suggested duration correctly for multiple destinations', () => {
-    const selected = [mockDestinations[0], mockDestinations[1]]; // Eg: 3-4 days and 2-3 days
-    mockedUseDestinations.mockReturnValue({
-      primaryDestination: mockDestinations[0],
-      selectedDestinations: selected,
+  it('should return appropriate duration for 3+ destinations', () => {
+    const bocasDelToro = mockDestinations[0];
+    const sanBlas = mockDestinations[1];
+    const mountainsAndVolcanoes = mockDestinations[2];
+    
+    mockUseDestination.mockReturnValue({
+      primaryDestination: bocasDelToro,
+      selectedDestinations: [bocasDelToro, sanBlas, mountainsAndVolcanoes],
+      setPrimaryDestination: jest.fn(),
+      addDestination: jest.fn(),
+      removeDestination: jest.fn(),
+      clearDestinations: jest.fn(),
+      isDestinationSelected: jest.fn(),
+      isMaxDestinationsReached: false,
+      selectedCount: 3,
     });
 
     const { result } = renderHook(() => useDestinationContent(), { wrapper });
-
-    const firstDuration = parseInt(mockDestinations[0].targetDuration.split('-')[0]);
-    const secondDuration = parseInt(mockDestinations[1].targetDuration.split('-')[0]);
-    const expectedMin = firstDuration + secondDuration;
-    const expectedMax = expectedMin + selected.length;
-
-    expect(result.current.suggestedDuration).toBe(`${expectedMin}-${expectedMax} days`);
+    
+    expect(result.current.suggestedDuration).toBe('7-10 days');
   });
 }); 

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useDestinations } from '../contexts/DestinationContext';
+import { useDestination } from '../contexts/DestinationContext';
 
 /**
  * A custom hook to generate dynamic content based on selected destinations.
@@ -10,48 +10,55 @@ import { useDestinations } from '../contexts/DestinationContext';
  * @property {string} suggestedDuration - A dynamically calculated trip duration based on the selected destinations.
  */
 export const useDestinationContent = () => {
-  const { primaryDestination, selectedDestinations } = useDestinations();
+  const { primaryDestination, selectedDestinations } = useDestination();
 
   /**
    * Generates a combined description for the selected destinations.
    * - If no primary destination, returns an empty string.
    * - If one destination is selected, returns its description.
-   * - If multiple destinations are selected, creates a narrative combining them.
+   * - If multiple destinations are selected, combines their descriptions intelligently.
    */
   const combinedDescription = useMemo(() => {
     if (!primaryDestination) return '';
-    if (selectedDestinations.length === 0) return primaryDestination.description;
+    
     if (selectedDestinations.length === 1) {
-        const singleDest = selectedDestinations[0];
-        return singleDest ? singleDest.description : primaryDestination.description;
+      return primaryDestination.description;
     }
-
-    const destinationNames = selectedDestinations.map(d => d.name).join(', ');
-    const primaryTheme = primaryDestination.theme;
-    const activities = selectedDestinations
-      .flatMap(d => d.primaryActivities)
-      .filter((v, i, a) => a.indexOf(v) === i)
-      .slice(0, 3)
-      .join(', ');
-
-    return `Experience the best of ${destinationNames} in one unforgettable journey. From ${primaryTheme} to diverse adventures including ${activities}, this multi-destination experience showcases Panama's incredible diversity.`;
+    
+    if (selectedDestinations.length > 1) {
+      const otherDestinations = selectedDestinations
+        .filter(dest => dest.id !== primaryDestination.id)
+        .map(dest => dest.name);
+      
+      if (otherDestinations.length === 1) {
+        return `Experience the best of ${primaryDestination.name} and ${otherDestinations[0]}. ${primaryDestination.description}`;
+      } else if (otherDestinations.length > 1) {
+        const lastDestination = otherDestinations.pop();
+        return `Discover ${primaryDestination.name}, ${otherDestinations.join(', ')}, and ${lastDestination}. ${primaryDestination.description}`;
+      }
+    }
+    
+    return primaryDestination.description;
   }, [primaryDestination, selectedDestinations]);
 
   /**
-   * Calculates the suggested trip duration based on the selected destinations.
-   * - If no destinations are selected, it defaults to the primary destination's duration.
-   * - It sums the minimum duration of each selected destination.
+   * Calculates a suggested trip duration based on the number of selected destinations.
+   * - 1 destination: 3-5 days
+   * - 2 destinations: 5-7 days
+   * - 3+ destinations: 7-10 days
    */
   const suggestedDuration = useMemo(() => {
-    if (selectedDestinations.length === 0) return primaryDestination?.targetDuration || '3-4 days';
+    const count = selectedDestinations.length;
     
-    const totalDays = selectedDestinations.reduce((sum, dest) => {
-      const days = parseInt(dest.targetDuration.split('-')[0]);
-      return sum + days;
-    }, 0);
+    if (count === 1) return '3-5 days';
+    if (count === 2) return '5-7 days';
+    if (count >= 3) return '7-10 days';
+    
+    return '3-5 days'; // fallback
+  }, [selectedDestinations.length]);
 
-    return `${totalDays}-${totalDays + selectedDestinations.length} days`;
-  }, [selectedDestinations, primaryDestination]);
-
-  return { combinedDescription, suggestedDuration };
+  return {
+    combinedDescription,
+    suggestedDuration
+  };
 }; 
