@@ -300,7 +300,7 @@
             "title": "Integrate useDestinationContent hook into Hero component",
             "description": "Modify the Hero component to use the useDestinationContent hook to display dynamic content based on selected destinations.",
             "dependencies": [],
-            "details": "1. Import the useDestinationContent hook in the Hero component\n2. Call the hook to get combinedDescription and suggestedDuration\n3. Replace static content in the Hero component with dynamic content from the hook\n4. Add conditional rendering to handle cases when no destinations are selected\n5. Ensure proper styling for the dynamic content",
+            "details": "1. Import the useDestinationContent hook in the Hero component\n2. Call the hook to get combinedDescription and suggestedDuration\n3. Replace static content in the Hero component with dynamic content from the hook\n4. Add conditional rendering to handle cases when no destinations are selected\n5. Ensure proper styling for the dynamic content\n<info added on 2025-06-27T14:06:07.843Z>\n6. Updated destination selection behavior:\n   - Modified Navbar to use setPrimaryDestinationOnly() for single-destination selection\n   - Maintained multi-destination selection capability in search dropdown\n   - Ensured clear separation between single and multi-destination selection flows\n   - Verified all tests pass with the new selection behavior\n</info added on 2025-06-27T14:06:07.843Z>",
             "status": "done",
             "testStrategy": "Manually test the Hero component with different destination selections to verify the content updates correctly."
           },

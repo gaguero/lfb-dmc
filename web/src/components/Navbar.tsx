@@ -7,7 +7,7 @@ import { usePrimaryDestination } from '@/contexts/DestinationContext';
 import { destinations } from '@/data/destinations';
 
 const Navbar = () => {
-  const { primaryDestination, setPrimaryDestination } = usePrimaryDestination();
+  const { primaryDestination, setPrimaryDestinationOnly } = usePrimaryDestination();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -41,7 +41,7 @@ const Navbar = () => {
   }, [isMobileMenuOpen]);
 
   const handleDestinationSelect = (destination: typeof destinations[0]) => {
-    setPrimaryDestination(destination);
+    setPrimaryDestinationOnly(destination);
     setIsMobileMenuOpen(false); // Close mobile menu after selection
   };
 
@@ -77,7 +77,7 @@ const Navbar = () => {
                   {destinations.map((destination) => (
                     <button
                       key={destination.id}
-                      onClick={() => setPrimaryDestination(destination)}
+                      onClick={() => setPrimaryDestinationOnly(destination)}
                       className={`px-2 lg:px-3 py-2 rounded-full transition-all text-center whitespace-nowrap leading-tight text-xs touch-target ${
                         primaryDestination?.id === destination.id
                           ? 'bg-ocean-blue text-white font-semibold shadow-md'

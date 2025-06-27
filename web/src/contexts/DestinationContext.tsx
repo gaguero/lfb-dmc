@@ -23,6 +23,9 @@ export interface DestinationContextType {
   /** Set the primary destination (main destination context) */
   setPrimaryDestination: (destination: Destination) => void;
   
+  /** Set only this destination as selected (clear all others) - for navbar use */
+  setPrimaryDestinationOnly: (destination: Destination) => void;
+  
   /** Add a destination to the selection (unlimited) */
   addDestination: (destination: Destination) => void;
   
@@ -92,6 +95,16 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
   }, []);
   
   /**
+   * Set only this destination as selected (clear all others) - for navbar use
+   * @param destination - The destination to set as the only selected destination
+   */
+  const setPrimaryDestinationOnly = useCallback((destination: Destination) => {
+    setPrimaryDestinationState(destination);
+    // Clear all selections and set only this destination
+    setSelectedDestinations([destination]);
+  }, []);
+  
+  /**
    * Add a destination to the selection (unlimited)
    * @param destination - The destination to add
    */
@@ -154,6 +167,7 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
     primaryDestination,
     selectedDestinations,
     setPrimaryDestination,
+    setPrimaryDestinationOnly,
     addDestination,
     removeDestination,
     clearDestinations,
@@ -269,7 +283,7 @@ export function useDestinationSelection() {
  * Useful for components that only need to work with the primary destination
  */
 export function usePrimaryDestination() {
-  const { primaryDestination, setPrimaryDestination } = useDestination();
+  const { primaryDestination, setPrimaryDestination, setPrimaryDestinationOnly } = useDestination();
   
   /**
    * Check if a specific destination is the primary destination
@@ -281,6 +295,7 @@ export function usePrimaryDestination() {
   return {
     primaryDestination,
     setPrimaryDestination,
+    setPrimaryDestinationOnly,
     isPrimaryDestination,
     hasPrimaryDestination: primaryDestination !== null
   };
