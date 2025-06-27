@@ -32,7 +32,7 @@ const Hero = () => {
             </p>
             <div>
               <button 
-                className="bg-coral-pink text-white font-semibold py-4 px-8 text-lg rounded-full shadow-lg hover:opacity-90 transition-all"
+                className="bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white font-semibold py-4 px-8 text-lg rounded-full shadow-[0_8px_30px_rgba(255,107,107,0.4)] hover:shadow-[0_12px_40px_rgba(255,107,107,0.5)] hover:scale-[1.05] transition-all duration-300"
               >
                 Plan Your Trip
               </button>
@@ -53,11 +53,14 @@ const Hero = () => {
               placeholder="blur"
               blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
             />
+            
+            {/* Elegant Backdrop Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent rounded-3xl"></div>
           </div>
 
-          {/* Search Widget Overlay */}
-          <div className="absolute bottom-3 left-6 right-6 z-10">
-            <div className="bg-white rounded-2xl p-6 shadow-2xl max-w-5xl mx-auto">
+          {/* Search Widget with Enhanced Shadow */}
+          <div className="absolute bottom-6 left-6 right-6 z-20">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-[0_20px_60px_rgba(0,0,0,0.3)] border border-white/20 max-w-5xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
                 {/* Location */}
                 <div>
@@ -98,9 +101,9 @@ const Hero = () => {
                 {/* Search Button */}
                 <div>
                   <button 
-                    className="w-full bg-coral-pink text-white p-4 rounded-2xl font-semibold text-lg shadow-lg hover:opacity-90 transition-all flex items-center justify-center"
+                    className="w-full bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white p-4 rounded-2xl font-semibold text-lg shadow-[0_8px_30px_rgba(255,107,107,0.4)] hover:shadow-[0_12px_40px_rgba(255,107,107,0.5)] hover:scale-[1.02] transition-all duration-300 flex items-center justify-center group"
                   >
-                    <Search size={20} className="mr-2" />
+                    <Search size={20} className="mr-2 group-hover:scale-110 transition-transform duration-300" />
                     Inquire
                   </button>
                 </div>
