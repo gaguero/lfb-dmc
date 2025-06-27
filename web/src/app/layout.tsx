@@ -31,13 +31,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${epilogue.variable} ${karla.variable} font-sans bg-gray-50`}>
         <DestinationProvider>
-          {/* Main Container with Elegant Overlay Effect */}
-          <div className="min-h-screen flex items-center justify-center p-4">
-            <div className="w-full max-w-[1400px] bg-white rounded-3xl shadow-[0_25px_80px_rgba(0,0,0,0.15)] backdrop-blur-sm border border-white/20 overflow-hidden">
-              {/* Content Container */}
+          {/* Main Container with Subtle Overlay Effect - Maintaining Original Width */}
+          <div className="w-full">
+            <div className="mx-auto bg-white shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-2xl border border-white/10 overflow-hidden" style={{ width: '90%' }}>
+              {/* Subtle gradient overlay for depth */}
               <div className="relative">
-                {/* Subtle gradient overlay for depth */}
-                <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-black/5 pointer-events-none rounded-3xl"></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-white/2 via-transparent to-black/2 pointer-events-none"></div>
                 
                 {/* Main Content */}
                 <div className="relative z-10">
