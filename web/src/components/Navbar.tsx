@@ -47,7 +47,7 @@ const Navbar = () => {
           </nav>
           
           {/* Icono de Perfil - Derecha */}
-          <div className="flex-shrink-0 pt-6">
+          <div className="flex-shrink-0 pt-1">
             <button className="p-2 hover:bg-gray-50 rounded-full transition-all">
               <User size={20} className="text-driftwood-brown" />
             </button>
