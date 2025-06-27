@@ -167,9 +167,9 @@ export const DEFAULT_DESTINATION_ID = 'bocas-del-toro';
 
 /**
  * Maximum number of destinations that can be combined
- * Enforced to maintain experience quality
+ * No limit - users can select as many destinations as they want
  */
-export const MAX_DESTINATIONS = 4;
+export const MAX_DESTINATIONS = Infinity;
 
 /**
  * Minimum number of destinations required for combinations

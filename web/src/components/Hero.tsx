@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { MapPin, Calendar, Search } from 'lucide-react';
 import { usePrimaryDestination } from '@/contexts/DestinationContext';
 import { destinations } from '@/data/destinations';
+import DestinationDropdown from './DestinationDropdown';
 
 const Hero = () => {
   const { primaryDestination } = usePrimaryDestination();
@@ -58,53 +59,93 @@ const Hero = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
           </div>
 
-          {/* Clean Search Widget */}
-          <div className="absolute bottom-6 left-6 right-6 z-20">
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/20 max-w-5xl mx-auto">
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
-                {/* Location */}
-                <div>
-                  <div className="flex items-center text-sm mb-3 text-driftwood-brown">
-                    <MapPin size={16} className="mr-2 text-ocean-blue" />
-                    Destination
+          {/* Modern Search Widget */}
+          <div className="absolute bottom-[-40px] left-6 right-6 z-20">
+            <div className="bg-white/95 backdrop-blur-sm rounded-3xl p-6 shadow-2xl border border-white/20 max-w-6xl mx-auto">
+              <div className="flex items-center justify-between gap-6">
+                {/* Location with Dropdown */}
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className="flex-shrink-0">
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center">
+                      <MapPin size={28} className="text-gray-600" />
+                    </div>
                   </div>
-                  <div className="text-lg font-semibold text-deep-cacao">
-                    {currentDestination.name}
-                  </div>
-                  <div className="text-sm text-driftwood-brown mt-1">
-                    {currentDestination.theme}
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium text-gray-600 mb-1">
+                      Location
+                    </div>
+                    <DestinationDropdown />
                   </div>
                 </div>
+
+                {/* Divider */}
+                <div className="h-16 w-px bg-gray-200"></div>
 
                 {/* Check In */}
-                <div>
-                  <div className="flex items-center text-sm mb-3 text-driftwood-brown">
-                    <Calendar size={16} className="mr-2 text-ocean-blue" />
-                    Arrival Date
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className="flex-shrink-0">
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center">
+                      <Calendar size={28} className="text-gray-600" />
+                    </div>
                   </div>
-                  <div className="text-lg font-semibold text-deep-cacao">
-                    Select Date
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium text-gray-600 mb-1">
+                      Check In
+                    </div>
+                    <div className="text-base font-semibold text-gray-900 truncate">
+                      Select Date
+                    </div>
                   </div>
                 </div>
 
-                {/* Duration */}
-                <div>
-                  <div className="flex items-center text-sm mb-3 text-driftwood-brown">
-                    <Calendar size={16} className="mr-2 text-ocean-blue" />
-                    Duration
+                {/* Divider */}
+                <div className="h-16 w-px bg-gray-200"></div>
+
+                {/* Check Out */}
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className="flex-shrink-0">
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center">
+                      <Calendar size={28} className="text-gray-600" />
+                    </div>
                   </div>
-                  <div className="text-lg font-semibold text-deep-cacao">
-                    {currentDestination.targetDuration}
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium text-gray-600 mb-1">
+                      Check Out
+                    </div>
+                    <div className="text-base font-semibold text-gray-900 truncate">
+                      {currentDestination.targetDuration}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Divider */}
+                <div className="h-16 w-px bg-gray-200"></div>
+
+                {/* People */}
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  <div className="flex-shrink-0">
+                    <div className="w-16 h-16 rounded-full flex items-center justify-center">
+                      <svg className="w-7 h-7 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                      </svg>
+                    </div>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-medium text-gray-600 mb-1">
+                      People
+                    </div>
+                    <div className="text-base font-semibold text-gray-900 truncate">
+                      2 Adults
+                    </div>
                   </div>
                 </div>
 
                 {/* Search Button */}
-                <div>
+                <div className="flex-shrink-0">
                   <button 
-                    className="w-full bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white p-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center group"
+                    className="w-16 h-16 bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center justify-center group"
                   >
-                    <Search size={20} className="mr-2 group-hover:scale-110 transition-transform duration-300" />
-                    Inquire
+                    <Search size={28} className="group-hover:scale-110 transition-transform duration-300" />
                   </button>
                 </div>
               </div>

@@ -33,7 +33,7 @@ export default function RootLayout({
         <DestinationProvider>
           {/* Main Container with Subtle Overlay Effect - Maintaining Original Width */}
           <div className="w-full pt-10">
-            <div className="mx-auto shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-2xl border border-white/10 overflow-hidden" style={{ width: '90%' }}>
+            <div className="mx-auto shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-2xl border border-white/10 overflow-hidden pb-80" style={{ width: '90%' }}>
               {/* Subtle gradient overlay for depth */}
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/2 via-transparent to-black/2 pointer-events-none"></div>

@@ -17,13 +17,13 @@ export interface DestinationContextType {
   /** Currently selected primary destination (from navbar) */
   primaryDestination: Destination | null;
   
-  /** Array of all selected destinations (including primary) - max 4 destinations */
+  /** Array of all selected destinations (including primary) - unlimited */
   selectedDestinations: Destination[];
   
   /** Set the primary destination (main destination context) */
   setPrimaryDestination: (destination: Destination) => void;
   
-  /** Add a destination to the selection (max 4 total) */
+  /** Add a destination to the selection (unlimited) */
   addDestination: (destination: Destination) => void;
   
   /** Remove a destination from the selection by ID */
@@ -35,7 +35,7 @@ export interface DestinationContextType {
   /** Check if a specific destination is currently selected */
   isDestinationSelected: (destinationId: string) => boolean;
   
-  /** Check if maximum destinations (4) have been selected */
+  /** Check if maximum destinations have been selected (always false now - no limit) */
   isMaxDestinationsReached: boolean;
   
   /** Get the count of currently selected destinations */
@@ -84,11 +84,7 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
         return current;
       }
       
-      // If we're at max capacity, replace the first non-primary destination
-      if (current.length >= MAX_DESTINATIONS) {
-        const withoutFirst = current.slice(1);
-        return [destination, ...withoutFirst.slice(0, MAX_DESTINATIONS - 1)];
-      }
+      // No limit - just add to the beginning
       
       // Add destination to the beginning of the array
       return [destination, ...current];
@@ -96,7 +92,7 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
   }, []);
   
   /**
-   * Add a destination to the selection (max 4 destinations)
+   * Add a destination to the selection (unlimited)
    * @param destination - The destination to add
    */
   const addDestination = useCallback((destination: Destination) => {
@@ -106,13 +102,7 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
         return current;
       }
       
-      // Check if we're at max capacity
-      if (current.length >= MAX_DESTINATIONS) {
-        console.warn(`Maximum ${MAX_DESTINATIONS} destinations already selected`);
-        return current;
-      }
-      
-      // Add destination to selection
+      // Add destination to selection (no limit)
       return [...current, destination];
     });
   }, []);
@@ -156,7 +146,7 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
   }, [selectedDestinations]);
   
   // Computed values for UI logic
-  const isMaxDestinationsReached = selectedDestinations.length >= MAX_DESTINATIONS;
+  const isMaxDestinationsReached = false; // No limit anymore
   const selectedCount = selectedDestinations.length;
   
   // Context value object containing all state and functions
