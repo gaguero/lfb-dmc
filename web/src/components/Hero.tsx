@@ -1,72 +1,136 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { MapPin, Calendar, Search } from 'lucide-react';
-import { usePrimaryDestination } from '@/contexts/DestinationContext';
+import { usePrimaryDestination, useDestination } from '@/contexts/DestinationContext';
 import { destinations } from '@/data/destinations';
 import DestinationDropdown from './DestinationDropdown';
 
 const Hero = () => {
   const { primaryDestination } = usePrimaryDestination();
+  const { selectedDestinations } = useDestination();
   
-  // Use default destination (Bocas del Toro) if none selected
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  
   const currentDestination = primaryDestination || destinations.find(d => d.id === 'bocas-del-toro') || destinations[0];
+  const destinationsToShow = selectedDestinations.length > 0 ? selectedDestinations : [currentDestination];
 
   return (
     <div className="bg-sand-ivory">
       <div className="max-w-7xl mx-auto mobile-container pt-0 pb-0">
-        {/* Top Section: Title and Description - Responsive Layout */}
+        {/* Top Section: Title and Description */}
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 mt-0 mb-4 sm:mb-6">
-          {/* Title - Full width on mobile, 70% on desktop */}
           <div className="w-full lg:w-[70%]">
-            <h1 className="font-display text-3xl sm:text-4xl lg:text-6xl font-bold leading-tight lg:leading-none tracking-tight text-driftwood-brown">
+            <h1 className="font-display text-3xl sm:text-4xl lg:text-6xl font-bold leading-tight lg:leading-none tracking-tight text-driftwood-brown transition-all duration-300 ease-out">
               Discover<br />
-              <span className="block">{currentDestination.name}</span>
+              <span className="block">
+                {destinationsToShow.length > 1 
+                  ? `${destinationsToShow.length} Destinations` 
+                  : currentDestination.name
+                }
+              </span>
             </h1>
           </div>
-          
-          {/* Description and CTA - Full width on mobile, 30% on desktop */}
           <div className="w-full lg:w-[30%] flex flex-col justify-end">
-            <p className="text-lg sm:text-xl leading-relaxed mb-6 sm:mb-8 text-driftwood-brown">
-              {currentDestination.shortDescription}
+            <p className="text-lg sm:text-xl leading-relaxed mb-6 sm:mb-8 text-driftwood-brown transition-all duration-300 ease-out">
+              {destinationsToShow.length > 1 
+                ? `Experience the best of ${destinationsToShow.map(d => d.name).join(', ')} in one unforgettable journey.`
+                : currentDestination.shortDescription
+              }
             </p>
             <div>
-              <button 
-                className="w-full sm:w-auto bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white font-semibold py-4 px-8 text-lg rounded-full shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 touch-target-comfort"
-              >
+              <button className="w-full sm:w-auto bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white font-semibold py-4 px-8 text-lg rounded-full shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 touch-target-comfort">
                 Plan Your Trip
               </button>
             </div>
           </div>
         </div>
 
-        {/* Hero Image with Search Widget - Responsive Heights with Mobile Adjustment */}
+        {/* Cinematic Destination Viewport System */}
         <div className="relative">
           <div className="h-72 sm:h-80 md:h-96 lg:h-[400px] w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl">
-            <Image 
-              src={currentDestination.image} 
-              alt={`${currentDestination.name} - ${currentDestination.theme}`}
-              width={1200}
-              height={400}
-              className="w-full h-full object-cover"
-              priority={true}
-              placeholder="blur"
-              blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
-            />
-            
-            {/* Light overlay for text readability */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+            <div className="relative h-full w-full overflow-hidden flex">
+              {destinationsToShow.map((destination, index) => {
+                const isHovered = hoveredIndex === index;
+                const hasHover = hoveredIndex !== null;
+                const numDestinations = destinationsToShow.length;
+
+                let width;
+                if (numDestinations <= 1) {
+                  width = '100%';
+                } else if (hasHover) {
+                  width = isHovered ? '60%' : `${40 / (numDestinations - 1)}%`;
+                } else {
+                  width = `${100 / numDestinations}%`;
+                }
+
+                return (
+                  <div
+                    key={`slice-${destination.id}`}
+                    className="relative h-full overflow-hidden transition-all duration-350 ease-in-out group"
+                    style={{
+                      width: width,
+                      filter: hasHover && !isHovered ? 'blur(4px) brightness(0.7)' : 'blur(0px) brightness(1)',
+                    }}
+                    onMouseEnter={() => numDestinations > 1 && setHoveredIndex(index)}
+                    onMouseLeave={() => numDestinations > 1 && setHoveredIndex(null)}
+                  >
+                    <Image
+                      src={destination.image}
+                      alt={`View for ${destination.name}`}
+                      layout="fill"
+                      objectFit="cover"
+                      objectPosition={`${(index / Math.max(1, numDestinations - 1)) * 100}% center`}
+                      priority={index < 3}
+                      className="transition-transform duration-350 ease-in-out"
+                      style={{
+                        transform: isHovered ? 'scale(1.05)' : 'scale(1)',
+                      }}
+                    />
+                    <div className={`absolute bottom-3 left-3 bg-black/80 text-white px-3 py-2 rounded-xl text-xs sm:text-sm font-medium backdrop-blur-md border border-white/20 transition-all duration-200 ease-out z-20 ${
+                      numDestinations > 1 ? 'opacity-100' : 'opacity-0'
+                    } group-hover:scale-105`}>
+                      <div className="flex items-center gap-2">
+                        {primaryDestination?.id === destination.id && <div className="w-2 h-2 bg-coral-pink rounded-full animate-pulse" />}
+                        <span>{destination.name}</span>
+                        {numDestinations > 1 && <div className="text-xs opacity-70">{index + 1}/{numDestinations}</div>}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent pointer-events-none z-5"></div>
+            {destinationsToShow.length > 1 && (
+              <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-semibold shadow-xl border border-white/20 z-30">
+                <div className="flex items-center gap-3">
+                  <div className="flex gap-1">
+                    {destinationsToShow.slice(0, 6).map((_, i) => (
+                      <div 
+                        key={i} 
+                        className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                          i === 0 ? 'bg-coral-pink animate-pulse' : 'bg-white/60'
+                        }`} 
+                      />
+                    ))}
+                    {destinationsToShow.length > 6 && (
+                      <span className="text-xs text-coral-pink font-bold ml-1">+{destinationsToShow.length - 6}</span>
+                    )}
+                  </div>
+                  <span className="text-white/90">{destinationsToShow.length} destinations</span>
+                </div>
+              </div>
+            )}
+            {destinationsToShow.length > 2 && (
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-coral-pink via-white/30 to-coral-pink opacity-60 z-30"></div>
+            )}
           </div>
 
-          {/* Responsive Search Widget - Mobile Centered 75% Width, Much Lower Position */}
+          {/* Responsive Search Widget */}
           <div className="absolute bottom-[-60px] sm:bottom-[-180px] lg:bottom-[-40px] left-1/2 transform -translate-x-1/2 lg:left-6 lg:right-6 lg:transform-none lg:translate-x-0 z-20 w-[75%] lg:w-auto">
             <div className="bg-white/70 backdrop-blur-md rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/30 max-w-6xl mx-auto">
-              
-              {/* Mobile Layout: 2x2 Grid for sm screens, then horizontal for lg+ */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-center lg:justify-between gap-4 sm:gap-6">
-                
-                {/* Location with Dropdown */}
                 <div className="flex items-center gap-3 sm:gap-4 col-span-1 sm:col-span-2 lg:col-span-1 lg:flex-1 min-w-0">
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center touch-target">
@@ -80,11 +144,7 @@ const Hero = () => {
                     <DestinationDropdown />
                   </div>
                 </div>
-
-                {/* Mobile Divider - Hidden on lg+ */}
                 <div className="hidden lg:block h-12 sm:h-14 lg:h-16 w-px bg-gray-200"></div>
-
-                {/* Check In */}
                 <div className="flex items-center gap-3 sm:gap-4 lg:flex-1 min-w-0">
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center touch-target">
@@ -100,11 +160,7 @@ const Hero = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* Mobile Divider - Hidden on lg+ */}
                 <div className="hidden lg:block h-12 sm:h-14 lg:h-16 w-px bg-gray-200"></div>
-
-                {/* Check Out */}
                 <div className="flex items-center gap-3 sm:gap-4 lg:flex-1 min-w-0">
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center touch-target">
@@ -116,15 +172,14 @@ const Hero = () => {
                       Check Out
                     </div>
                     <div className="text-sm sm:text-base font-semibold text-gray-900 truncate">
-                      {currentDestination.targetDuration}
+                      {selectedDestinations.length > 1 
+                        ? `${Math.max(...selectedDestinations.map(d => parseInt(d.targetDuration.split(' ')[0])))} days`
+                        : currentDestination.targetDuration
+                      }
                     </div>
                   </div>
                 </div>
-
-                {/* Mobile Divider - Hidden on lg+ */}
                 <div className="hidden lg:block h-12 sm:h-14 lg:h-16 w-px bg-gray-200"></div>
-
-                {/* People */}
                 <div className="flex items-center gap-3 sm:gap-4 lg:flex-1 min-w-0">
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center touch-target">
@@ -142,12 +197,8 @@ const Hero = () => {
                     </div>
                   </div>
                 </div>
-
-                {/* Search Button - Full width on mobile, fixed size on desktop */}
                 <div className="col-span-1 sm:col-span-2 lg:col-span-1 lg:flex-shrink-0 mt-2 sm:mt-4 lg:mt-0">
-                  <button 
-                    className="w-full lg:w-16 lg:h-16 h-12 sm:h-14 bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center group touch-target-comfort"
-                  >
+                  <button className="w-full lg:w-16 lg:h-16 h-12 sm:h-14 bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center group touch-target-comfort">
                     <Search size={20} className="sm:w-6 sm:h-6 lg:w-7 lg:h-7 group-hover:scale-110 transition-transform duration-300" />
                     <span className="ml-2 lg:hidden font-semibold">Search</span>
                   </button>
@@ -161,4 +212,4 @@ const Hero = () => {
   );
 };
 
-export default Hero; 
+export default Hero;
