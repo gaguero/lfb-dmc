@@ -23,12 +23,76 @@
   --radius-pill: 999px; /* Pill-shaped buttons */
   --radius-card: 8px; /* Cards */
   --radius-field: 24px; /* Form fields (capsule) */
+  
+  /* Mobile-First Touch Targets */
+  --touch-target-min: 44px; /* WCAG AAA minimum touch target */
+  --touch-target-comfort: 48px; /* Comfortable touch target */
+  --spacing-touch: 8px; /* Minimum spacing between touch targets */
+}
+
+/* Mobile-First Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px; /* Base font size for rem calculations */
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%; /* Prevent text scaling in landscape */
+  -ms-text-size-adjust: 100%;
 }
 
 body {
   background-color: var(--color-sand-ivory);
   color: var(--color-driftwood-brown);
   font-family: var(--font-family-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  
+  /* Mobile Touch Optimizations */
+  touch-action: manipulation; /* Disable double-tap zoom delay */
+  -webkit-tap-highlight-color: rgba(240, 142, 128, 0.2); /* Brand coral tap highlight */
+  
+  /* Safe Area Support for devices with notches */
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Responsive Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-display);
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--color-deep-cacao);
+}
+
+/* Mobile-First Button Styles */
+button, [role="button"] {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:focus-visible, [role="button"]:focus-visible {
+  outline: 2px solid var(--color-coral-pink);
+  outline-offset: 2px;
+}
+
+/* Mobile-optimized input fields */
+input, select, textarea {
+  min-height: var(--touch-target-min);
+  font-size: 16px; /* Prevent zoom on iOS */
+  touch-action: manipulation;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--color-ocean-blue);
+  outline-offset: 2px;
 }
 
 /* Ensure proper stacking context */
@@ -41,13 +105,71 @@ main {
 img {
   max-width: 100%;
   height: auto;
+  object-fit: cover;
 }
 
-/* Hide scrollbar */
+/* Hide scrollbar but maintain functionality */
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }
 .hide-scrollbar {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
+}
+
+/* Mobile-Specific Utility Classes */
+.touch-target {
+  min-height: var(--touch-target-min);
+  min-width: var(--touch-target-min);
+}
+
+.touch-target-comfort {
+  min-height: var(--touch-target-comfort);
+  min-width: var(--touch-target-comfort);
+}
+
+.mobile-container {
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+}
+
+/* Responsive Container Queries */
+@container (max-width: 640px) {
+  .container-sm\:hidden {
+    display: none;
+  }
+}
+
+/* Performance Optimizations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+/* Smooth Transitions */
+.smooth-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Mobile Backdrop Overlay */
+.mobile-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 40;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  pointer-events: none;
+}
+
+.mobile-backdrop.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Prevent body scroll when modal is open */
+.scroll-locked {
+  overflow: hidden;
+  position: fixed;
+  width: 100%;
 }
