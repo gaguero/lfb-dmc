@@ -41,9 +41,9 @@ const Hero = () => {
           </div>
         </div>
 
-        {/* Hero Image with Search Widget - Responsive Heights */}
+        {/* Hero Image with Search Widget - Responsive Heights with Mobile Adjustment */}
         <div className="relative">
-          <div className="h-60 sm:h-80 md:h-96 lg:h-[400px] w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl">
+          <div className="h-72 sm:h-80 md:h-96 lg:h-[400px] w-full rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl">
             <Image 
               src={currentDestination.image} 
               alt={`${currentDestination.name} - ${currentDestination.theme}`}
@@ -59,9 +59,9 @@ const Hero = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
           </div>
 
-          {/* Responsive Search Widget */}
-          <div className="absolute bottom-[-20px] sm:bottom-[-30px] lg:bottom-[-40px] left-2 right-2 sm:left-4 sm:right-4 lg:left-6 lg:right-6 z-20">
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/20 max-w-6xl mx-auto">
+          {/* Responsive Search Widget - Mobile Centered 75% Width, Much Lower Position */}
+          <div className="absolute bottom-[-60px] sm:bottom-[-180px] lg:bottom-[-40px] left-1/2 transform -translate-x-1/2 lg:left-6 lg:right-6 lg:transform-none lg:translate-x-0 z-20 w-[75%] lg:w-auto">
+            <div className="bg-white/70 backdrop-blur-md rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/30 max-w-6xl mx-auto">
               
               {/* Mobile Layout: 2x2 Grid for sm screens, then horizontal for lg+ */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-center lg:justify-between gap-4 sm:gap-6">
