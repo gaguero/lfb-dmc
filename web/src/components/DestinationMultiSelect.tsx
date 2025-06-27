@@ -11,7 +11,6 @@ import { useDestination } from '@/contexts/DestinationContext';
  */
 const DestinationMultiSelect: React.FC = () => {
   const { 
-    selectedDestinations, 
     addDestination, 
     removeDestination, 
     isDestinationSelected,
