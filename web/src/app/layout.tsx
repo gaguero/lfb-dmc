@@ -32,8 +32,8 @@ export default function RootLayout({
       <body className={`${epilogue.variable} ${karla.variable} font-sans bg-gray-50`}>
         <DestinationProvider>
           {/* Main Container with Subtle Overlay Effect - Maintaining Original Width */}
-          <div className="w-full">
-            <div className="mx-auto bg-white shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-2xl border border-white/10 overflow-hidden" style={{ width: '90%' }}>
+          <div className="w-full pt-10">
+            <div className="mx-auto shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-2xl border border-white/10 overflow-hidden" style={{ width: '90%' }}>
               {/* Subtle gradient overlay for depth */}
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-br from-white/2 via-transparent to-black/2 pointer-events-none"></div>
