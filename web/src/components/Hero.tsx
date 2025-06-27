@@ -32,7 +32,7 @@ const Hero = () => {
             </p>
             <div>
               <button 
-                className="bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white font-semibold py-4 px-8 text-lg rounded-full shadow-[0_8px_30px_rgba(255,107,107,0.4)] hover:shadow-[0_12px_40px_rgba(255,107,107,0.5)] hover:scale-[1.05] transition-all duration-300"
+                className="bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white font-semibold py-4 px-8 text-lg rounded-full shadow-lg hover:shadow-xl hover:scale-[1.05] transition-all duration-300"
               >
                 Plan Your Trip
               </button>
@@ -42,7 +42,7 @@ const Hero = () => {
 
         {/* Hero Image with Search Widget */}
         <div className="relative">
-          <div className="h-96 lg:h-[400px] w-full rounded-3xl overflow-hidden shadow-2xl">
+          <div className="h-96 lg:h-[400px] w-full rounded-3xl overflow-hidden shadow-xl">
             <Image 
               src={currentDestination.image} 
               alt={`${currentDestination.name} - ${currentDestination.theme}`}
@@ -54,13 +54,13 @@ const Hero = () => {
               blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwCdABmX/9k="
             />
             
-            {/* Elegant Backdrop Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent rounded-3xl"></div>
+            {/* Light overlay for text readability */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
           </div>
 
-          {/* Search Widget with Enhanced Shadow */}
+          {/* Clean Search Widget */}
           <div className="absolute bottom-6 left-6 right-6 z-20">
-            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-[0_20px_60px_rgba(0,0,0,0.3)] border border-white/20 max-w-5xl mx-auto">
+            <div className="bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl border border-white/20 max-w-5xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-4 gap-6 items-end">
                 {/* Location */}
                 <div>
@@ -101,7 +101,7 @@ const Hero = () => {
                 {/* Search Button */}
                 <div>
                   <button 
-                    className="w-full bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white p-4 rounded-2xl font-semibold text-lg shadow-[0_8px_30px_rgba(255,107,107,0.4)] hover:shadow-[0_12px_40px_rgba(255,107,107,0.5)] hover:scale-[1.02] transition-all duration-300 flex items-center justify-center group"
+                    className="w-full bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white p-4 rounded-2xl font-semibold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 flex items-center justify-center group"
                   >
                     <Search size={20} className="mr-2 group-hover:scale-110 transition-transform duration-300" />
                     Inquire
