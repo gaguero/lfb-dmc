@@ -168,6 +168,7 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
   const selectedCount = selectedDestinations.length;
   
   // Context value object containing all state and functions - memoized to prevent infinite re-renders
+  // Only include state values in dependencies, not memoized functions
   const contextValue: DestinationContextType = useMemo(() => ({
     primaryDestination,
     selectedDestinations,
@@ -182,7 +183,6 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
   }), [
     primaryDestination,
     selectedDestinations,
-    isDestinationSelected,
     selectedCount
   ]);
   

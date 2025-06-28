@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { MapPin, Calendar, Search } from 'lucide-react';
 import { usePrimaryDestination, useDestination } from '@/contexts/DestinationContext';
@@ -19,11 +19,24 @@ const Hero = () => {
   
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [paths, setPaths] = useState<PathInfo[]>([]);
+  const [mounted, setMounted] = useState(false);
   
   const currentDestination = primaryDestination || destinations.find(d => d.id === 'bocas-del-toro') || destinations[0];
-  const destinationsToShow = selectedDestinations.length > 0 ? selectedDestinations : [currentDestination];
+  
+  // Memoize destinationsToShow to prevent infinite re-renders in useEffect
+  const destinationsToShow = useMemo(() => {
+    return selectedDestinations.length > 0 ? selectedDestinations : [currentDestination];
+  }, [selectedDestinations, currentDestination]);
+
+  // Set mounted to true after component mounts on client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
+    // Only calculate paths if component is mounted (client-side)
+    if (!mounted) return;
+    
     const calculatePaths = () => {
       if (destinationsToShow.length <= 1) {
         setPaths([]);
@@ -66,7 +79,7 @@ const Hero = () => {
     window.addEventListener('resize', calculatePaths);
     return () => window.removeEventListener('resize', calculatePaths);
 
-  }, [destinationsToShow, hoveredIndex]);
+  }, [mounted, destinationsToShow, hoveredIndex]); // Added mounted as dependency
 
   return (
     <div className="bg-sand-ivory">
@@ -153,7 +166,7 @@ const Hero = () => {
             </div>
 
             {/* Path visualization for multi-destination */}
-            {paths.length > 0 && (
+            {mounted && paths.length > 0 && (
               <svg className="absolute inset-0 w-full h-full pointer-events-none z-20" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
