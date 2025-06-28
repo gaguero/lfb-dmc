@@ -5,9 +5,9 @@
  * Manages primary destination selection and multi-destination combinations
  */
 
-import { createContext, useState, useCallback, useContext, useMemo } from 'react';
+import { createContext, useState, useCallback, useContext, useMemo, useEffect } from 'react';
 import { Destination } from '../types/destination';
-import { MAX_DESTINATIONS } from '../data/destinations';
+import { MAX_DESTINATIONS, destinations, DEFAULT_DESTINATION_ID } from '../data/destinations';
 
 /**
  * Context type interface defining all available destination management functions
@@ -72,6 +72,15 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
   // Core state for destination management
   const [primaryDestination, setPrimaryDestinationState] = useState<Destination | null>(null);
   const [selectedDestinations, setSelectedDestinations] = useState<Destination[]>([]);
+  
+  // Initialize with default destination (Bocas del Toro) on mount
+  useEffect(() => {
+    const defaultDestination = destinations.find(dest => dest.id === DEFAULT_DESTINATION_ID);
+    if (defaultDestination && !primaryDestination && selectedDestinations.length === 0) {
+      setPrimaryDestinationState(defaultDestination);
+      setSelectedDestinations([defaultDestination]);
+    }
+  }, []); // Empty dependency array - only run once on mount
   
   /**
    * Set the primary destination and ensure it's included in selected destinations

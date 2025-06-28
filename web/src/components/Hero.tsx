@@ -86,7 +86,7 @@ const Hero = () => {
       <div className="max-w-7xl mx-auto mobile-container pt-0 pb-0">
         {/* Top Section: Title and Description */}
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 mt-0 mb-4 sm:mb-6">
-          <div className="w-full lg:w-[70%]">
+          <div className="w-full lg:w-[55%]">
             <h1 className="font-display text-3xl sm:text-4xl lg:text-6xl font-bold leading-tight lg:leading-none tracking-tight text-driftwood-brown transition-all duration-300 ease-out">
               Discover<br />
               <span className="block">
@@ -97,7 +97,7 @@ const Hero = () => {
               </span>
             </h1>
           </div>
-          <div className="w-full lg:w-[30%] flex flex-col justify-end">
+          <div className="w-full lg:w-[45%] flex flex-col justify-end">
             <p className="text-lg sm:text-xl leading-relaxed mb-6 sm:mb-8 text-driftwood-brown transition-all duration-300 ease-out">
               {combinedDescription}
             </p>
