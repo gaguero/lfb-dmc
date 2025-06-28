@@ -80,6 +80,7 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
       setPrimaryDestinationState(defaultDestination);
       setSelectedDestinations([defaultDestination]);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Empty dependency array - only run once on mount
   
   /**
@@ -189,11 +190,12 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
     isDestinationSelected,
     isMaxDestinationsReached,
     selectedCount
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }), [
     primaryDestination,
     selectedDestinations,
     selectedCount
-  ]);
+  ]); // Functions intentionally excluded to prevent infinite re-renders
   
   return (
     <DestinationContext.Provider value={contextValue}>
