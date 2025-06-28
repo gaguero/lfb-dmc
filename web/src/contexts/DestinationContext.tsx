@@ -5,7 +5,7 @@
  * Manages primary destination selection and multi-destination combinations
  */
 
-import { createContext, useState, useCallback, useContext } from 'react';
+import { createContext, useState, useCallback, useContext, useMemo } from 'react';
 import { Destination } from '../types/destination';
 import { MAX_DESTINATIONS } from '../data/destinations';
 
@@ -162,8 +162,8 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
   const isMaxDestinationsReached = false; // No limit anymore
   const selectedCount = selectedDestinations.length;
   
-  // Context value object containing all state and functions
-  const contextValue: DestinationContextType = {
+  // Context value object containing all state and functions - memoized to prevent infinite re-renders
+  const contextValue: DestinationContextType = useMemo(() => ({
     primaryDestination,
     selectedDestinations,
     setPrimaryDestination,
@@ -174,7 +174,18 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
     isDestinationSelected,
     isMaxDestinationsReached,
     selectedCount
-  };
+  }), [
+    primaryDestination,
+    selectedDestinations,
+    setPrimaryDestination,
+    setPrimaryDestinationOnly,
+    addDestination,
+    removeDestination,
+    clearDestinations,
+    isDestinationSelected,
+    isMaxDestinationsReached,
+    selectedCount
+  ]);
   
   return (
     <DestinationContext.Provider value={contextValue}>

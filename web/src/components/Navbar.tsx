@@ -61,10 +61,10 @@ const Navbar = () => {
             {/* Logo - Responsive sizing */}
             <div className="flex-shrink-0">
               <Image 
-                src="/lfb-logo - vertical just tex.png" 
+                src="/logo-color.png" 
                 alt="Local From Bocas" 
-                width={160}
-                height={20}
+                width={140}
+                height={40}
                 className="h-4 sm:h-5 w-auto" 
                 priority={true}
               />
