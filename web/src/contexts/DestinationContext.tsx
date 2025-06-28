@@ -129,17 +129,22 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
       const filtered = current.filter(dest => dest.id !== destinationId);
       
       // If we removed the primary destination, clear it or set a new one
-      if (primaryDestination?.id === destinationId) {
-        if (filtered.length > 0) {
-          setPrimaryDestinationState(filtered[0]);
-        } else {
-          setPrimaryDestinationState(null);
+      // Access current primary destination through state updater
+      setPrimaryDestinationState(currentPrimary => {
+        if (currentPrimary?.id === destinationId) {
+          // If we removed the primary destination
+          if (filtered.length > 0) {
+            return filtered[0]; // Set first remaining as primary
+          } else {
+            return null; // No destinations left
+          }
         }
-      }
+        return currentPrimary; // Keep current primary unchanged
+      });
       
       return filtered;
     });
-  }, [primaryDestination]);
+  }, []); // Remove primaryDestination from dependencies to prevent infinite loop
   
   /**
    * Clear all destination selections
@@ -177,13 +182,7 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
   }), [
     primaryDestination,
     selectedDestinations,
-    setPrimaryDestination,
-    setPrimaryDestinationOnly,
-    addDestination,
-    removeDestination,
-    clearDestinations,
     isDestinationSelected,
-    isMaxDestinationsReached,
     selectedCount
   ]);
   
