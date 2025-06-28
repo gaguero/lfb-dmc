@@ -173,3 +173,10 @@ img {
   position: fixed;
   width: 100%;
 }
+
+/* Remove default blue outline for search card inputs */
+.search-card input:focus,
+.search-card select:focus,
+.search-card textarea:focus {
+  outline: none !important;
+}

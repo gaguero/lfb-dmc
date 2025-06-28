@@ -1,25 +1,39 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, forwardRef, memo } from 'react';
 import Image from 'next/image';
 import { MapPin, Calendar, Search } from 'lucide-react';
 import { usePrimaryDestination, useDestination } from '@/contexts/DestinationContext';
-import { useDestinationContent } from '@/hooks/useDestinationContent';
+import { useDestinationContent, useDestinationImages, usePerformance } from '@/hooks';
 import { destinations } from '@/data/destinations';
 import DestinationDropdown from './DestinationDropdown';
+import DestinationSlice from './DestinationSlice';
+import { getPathD, getCenterPoint } from '@/utils/pathUtils';
 
 interface PathInfo {
   d: string;
 }
 
-const Hero = () => {
+const Hero = memo(forwardRef<HTMLDivElement>((props, ref) => {
+  usePerformance('Hero');
   const { primaryDestination } = usePrimaryDestination();
   const { selectedDestinations } = useDestination();
   const { combinedDescription, suggestedDuration } = useDestinationContent();
+  const { getImageProps, shouldHavePriority } = useDestinationImages();
   
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [paths, setPaths] = useState<PathInfo[]>([]);
   const [mounted, setMounted] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [customerName, setCustomerName] = useState('');
+  const [customerEmail, setCustomerEmail] = useState('');
+  const [notes, setNotes] = useState('');
+  const [isSending, setIsSending] = useState(false);
+  const [sendSuccess, setSendSuccess] = useState<boolean | null>(null);
+  const [peopleCount, setPeopleCount] = useState('2');
+  const [checkInDate, setCheckInDate] = useState(() => new Date().toISOString().split('T')[0]);
+  const [totalNightsValue, setTotalNightsValue] = useState(suggestedDuration);
+  const [animateModal, setAnimateModal] = useState(false);
   
   const currentDestination = primaryDestination || destinations.find(d => d.id === 'bocas-del-toro') || destinations[0];
   
@@ -27,6 +41,19 @@ const Hero = () => {
   const destinationsToShow = useMemo(() => {
     return selectedDestinations.length > 0 ? selectedDestinations : [currentDestination];
   }, [selectedDestinations, currentDestination]);
+
+  // Optimized event handlers with useCallback
+  const handleMouseEnter = useCallback((index: number, numDestinations: number) => {
+    if (numDestinations > 1) {
+      setHoveredIndex(index);
+    }
+  }, []);
+
+  const handleMouseLeave = useCallback((numDestinations: number) => {
+    if (numDestinations > 1) {
+      setHoveredIndex(null);
+    }
+  }, []);
 
   // Set mounted to true after component mounts on client side
   useEffect(() => {
@@ -81,9 +108,69 @@ const Hero = () => {
 
   }, [mounted, destinationsToShow, hoveredIndex]); // Added mounted as dependency
 
+  // Handler to send booking request
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSending(true);
+    try {
+      const res = await fetch('/api/sendBooking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          locations: destinationsToShow.map(d => d.name),
+          checkIn: checkInDate,
+          totalNights: totalNightsValue,
+          people: peopleCount,
+          name: customerName,
+          email: customerEmail,
+          notes,
+        }),
+      });
+      const data = await res.json();
+      setSendSuccess(data.success);
+    } catch (err) {
+      console.error(err);
+      setSendSuccess(false);
+    } finally {
+      setIsSending(false);
+    }
+  };
+
+  // Recalculate default total travel days when destinations change
+  useEffect(() => {
+    setTotalNightsValue((destinationsToShow.length * 4).toString());
+  }, [destinationsToShow]);
+
+  // Close modal with exit animation
+  const closeModal = () => {
+    setAnimateModal(false);
+    setTimeout(() => {
+      setIsModalOpen(false);
+      setSendSuccess(null);
+    }, 300); // match transition duration
+  };
+
+  // Trigger enter animation when modal opens
+  useEffect(() => {
+    if (isModalOpen) {
+      // allow mount before animating
+      setTimeout(() => setAnimateModal(true), 10);
+    }
+  }, [isModalOpen]);
+
+  // Auto-close modal 2s after successful send
+  useEffect(() => {
+    if (sendSuccess === true) {
+      const timer = setTimeout(() => {
+        closeModal();
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [sendSuccess]);
+
   return (
-    <div className="bg-sand-ivory">
-      <div className="max-w-7xl mx-auto mobile-container pt-0 pb-0">
+    <div className="bg-transparent" ref={ref}>
+      <div className="max-w-7xl mx-auto mobile-container pt-0 pb-64 sm:pb-48 md:pb-64 lg:pb-0 relative">
         {/* Top Section: Title and Description */}
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 mt-0 mb-4 sm:mb-6">
           <div className="w-full lg:w-[55%]">
@@ -128,65 +215,21 @@ const Hero = () => {
                 }
 
                 return (
-                  <div
+                  <DestinationSlice
                     key={`slice-${destination.id}`}
-                    data-slice-id={`slice-${destination.id}`}
-                    className="relative h-full overflow-hidden transition-all duration-350 ease-in-out group"
-                    style={{
-                      width: width,
-                      filter: hasHover && !isHovered ? 'blur(4px) brightness(0.7)' : 'blur(0px) brightness(1)',
-                    }}
-                    onMouseEnter={() => numDestinations > 1 && setHoveredIndex(index)}
-                    onMouseLeave={() => numDestinations > 1 && setHoveredIndex(null)}
-                  >
-                    <Image
-                      src={destination.image}
-                      alt={`View for ${destination.name}`}
-                      layout="fill"
-                      objectFit="cover"
-                      objectPosition={`${(index / Math.max(1, numDestinations - 1)) * 100}% center`}
-                      priority={index < 3}
-                      className="transition-transform duration-350 ease-in-out"
-                      style={{
-                        transform: isHovered ? 'scale(1.05)' : 'scale(1)',
-                      }}
-                    />
-                    <div className={`absolute bottom-3 left-3 bg-black/80 text-white px-3 py-2 rounded-xl text-xs sm:text-sm font-medium backdrop-blur-md border border-white/20 transition-all duration-200 ease-out z-20 ${
-                      numDestinations > 1 ? 'opacity-100' : 'opacity-0'
-                    } group-hover:scale-105`}>
-                      <div className="flex items-center gap-2">
-                        {primaryDestination?.id === destination.id && <div className="w-2 h-2 bg-coral-pink rounded-full animate-pulse" />}
-                        <span>{destination.name}</span>
-                        {numDestinations > 1 && <div className="text-xs opacity-70">{index + 1}/{numDestinations}</div>}
-                      </div>
-                    </div>
-                  </div>
+                    destination={destination}
+                    index={index}
+                    isHovered={isHovered}
+                    hasHover={hasHover}
+                    numDestinations={numDestinations}
+                    width={width}
+                    primaryDestinationId={primaryDestination?.id}
+                    onMouseEnter={() => handleMouseEnter(index, numDestinations)}
+                    onMouseLeave={() => handleMouseLeave(numDestinations)}
+                  />
                 );
               })}
             </div>
-
-            {/* Path visualization for multi-destination */}
-            {mounted && paths.length > 0 && (
-              <svg className="absolute inset-0 w-full h-full pointer-events-none z-20" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" style={{stopColor: 'rgba(255,255,255,0.7)', stopOpacity: 1}} />
-                    <stop offset="100%" style={{stopColor: 'rgba(240,142,128,0.8)', stopOpacity: 1}} />
-                  </linearGradient>
-                </defs>
-                {paths.map((path, index) => (
-                  <path
-                    key={`path-${index}`}
-                    d={path.d}
-                    stroke="url(#pathGradient)"
-                    strokeWidth="2"
-                    fill="none"
-                    strokeDasharray="5, 5"
-                    className="transition-all duration-350 ease-in-out"
-                  />
-                ))}
-              </svg>
-            )}
 
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent pointer-events-none z-5"></div>
             {destinationsToShow.length > 1 && (
@@ -209,15 +252,12 @@ const Hero = () => {
                 </div>
               </div>
             )}
-            {destinationsToShow.length > 2 && (
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-coral-pink via-white/30 to-coral-pink opacity-60 z-30"></div>
-            )}
           </div>
 
           {/* Responsive Search Widget */}
-          <div className="absolute bottom-[-60px] sm:bottom-[-180px] lg:bottom-[-40px] left-1/2 transform -translate-x-1/2 lg:left-6 lg:right-6 lg:transform-none lg:translate-x-0 z-20 w-[75%] lg:w-auto">
-            <div className="bg-white/70 backdrop-blur-md rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/30 max-w-6xl mx-auto">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-center lg:justify-between gap-4 sm:gap-6">
+          <div className="absolute left-1/2 transform -translate-x-1/2 top-[70%] lg:top-auto lg:bottom-[-40px] lg:left-6 lg:right-6 lg:transform-none lg:translate-x-0 z-20 w-[75%] lg:w-auto">
+            <div className="search-card bg-white/50 backdrop-blur-sm rounded-2xl sm:rounded-3xl py-3 px-4 sm:py-4 sm:px-6 shadow-lg max-w-6xl mx-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:flex lg:items-center lg:justify-between gap-3 sm:gap-4">
                 <div className="flex items-center gap-3 sm:gap-4 col-span-1 sm:col-span-2 lg:col-span-1 lg:flex-1 min-w-0">
                   <div className="flex-shrink-0">
                     <div className="w-12 h-12 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-full flex items-center justify-center touch-target">
@@ -226,7 +266,7 @@ const Hero = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs sm:text-sm font-medium text-gray-600 mb-1">
-                      Location
+                      Locations
                     </div>
                     <DestinationDropdown />
                   </div>
@@ -242,9 +282,12 @@ const Hero = () => {
                     <div className="text-xs sm:text-sm font-medium text-gray-600 mb-1">
                       Check In
                     </div>
-                    <div className="text-sm sm:text-base font-semibold text-gray-900 truncate">
-                      Select Date
-                    </div>
+                    <input
+                      type="date"
+                      value={checkInDate}
+                      onChange={e => setCheckInDate(e.target.value)}
+                      className="w-full text-sm sm:text-base font-semibold text-gray-900 focus:outline-none focus:ring-0"
+                    />
                   </div>
                 </div>
                 <div className="hidden lg:block h-12 sm:h-14 lg:h-16 w-px bg-gray-200"></div>
@@ -256,11 +299,15 @@ const Hero = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs sm:text-sm font-medium text-gray-600 mb-1">
-                      Check Out
+                      Total travel days
                     </div>
-                    <div className="text-sm sm:text-base font-semibold text-gray-900 truncate">
-                      {suggestedDuration}
-                    </div>
+                    <input
+                      type="number"
+                      min={1}
+                      value={totalNightsValue}
+                      onChange={e => setTotalNightsValue(e.target.value)}
+                      className="w-full text-sm sm:text-base font-semibold text-gray-900 focus:outline-none focus:ring-0"
+                    />
                   </div>
                 </div>
                 <div className="hidden lg:block h-12 sm:h-14 lg:h-16 w-px bg-gray-200"></div>
@@ -276,13 +323,17 @@ const Hero = () => {
                     <div className="text-xs sm:text-sm font-medium text-gray-600 mb-1">
                       People
                     </div>
-                    <div className="text-sm sm:text-base font-semibold text-gray-900 truncate">
-                      2 Adults
-                    </div>
+                    <input
+                      type="number"
+                      min={1}
+                      className="w-full text-sm sm:text-base font-semibold text-gray-900 focus:outline-none focus:ring-0"
+                      value={peopleCount}
+                      onChange={e => setPeopleCount(e.target.value)}
+                    />
                   </div>
                 </div>
                 <div className="col-span-1 sm:col-span-2 lg:col-span-1 lg:flex-shrink-0 mt-2 sm:mt-4 lg:mt-0">
-                  <button className="w-full lg:w-16 lg:h-16 h-12 sm:h-14 bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 transition-all duration-300 flex items-center justify-center group touch-target-comfort">
+                  <button className="w-full lg:w-16 lg:h-16 h-12 sm:h-14 bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white rounded-full shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-coral-pink/50 transition-all duration-300 flex items-center justify-center group touch-target-comfort" onClick={() => setIsModalOpen(true)}>
                     <Search size={20} className="sm:w-6 sm:h-6 lg:w-7 lg:h-7 group-hover:scale-110 transition-transform duration-300" />
                     <span className="ml-2 lg:hidden font-semibold">Search</span>
                   </button>
@@ -292,8 +343,68 @@ const Hero = () => {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <div className={`fixed inset-0 bg-transparent backdrop-blur-xs sm:backdrop-blur-sm z-50 flex justify-center items-center transition-opacity duration-300 ${animateModal ? 'opacity-100' : 'opacity-0'}`}>
+          {/* Backdrop click to close */}
+          <div className="absolute inset-0" onClick={closeModal}></div>
+          {/* Modal Card */}
+          <div className={`bg-white/90 rounded-2xl p-4 sm:p-6 md:p-8 shadow-lg w-full max-w-lg sm:max-w-xl md:max-w-4xl max-h-[80vh] overflow-y-auto transform transition-transform duration-300 ${animateModal ? 'scale-100 opacity-100' : 'scale-95 opacity-0'}`}> 
+            {/* Drag handle (mobile only) */}
+            <div className="w-12 h-1 bg-gray-300 rounded mx-auto mb-4 md:hidden"></div>
+            <div className="flex flex-col md:flex-row gap-8">
+              {/* Summary Section */}
+              <div className="md:w-1/3">
+                <h2 className="text-2xl sm:text-3xl font-semibold mb-4">Trip Summary</h2>
+                <p className="text-base sm:text-sm text-gray-700 mb-4">
+                  Imagine waking up in {destinationsToShow.map(d => d.name).join(', ')} over the next {totalNightsValue} days—sunrise to sunset adventures await! Share a bit about yourself below, and we'll craft a personalized journey you'll never forget.
+                </p>
+                <div className="space-y-4">
+                  {['Locations', 'Check In Date', 'Total travel days', 'People'].map((label, idx) => (
+                    <div key={idx}>
+                      <div className="text-sm font-medium text-gray-600">{label}</div>
+                      <div className="text-base font-semibold text-gray-900">
+                        {label === 'Locations'
+                          ? destinationsToShow.map(d => d.name).join(', ')
+                          : label === 'Check In Date'
+                          ? checkInDate
+                          : label === 'Total travel days'
+                          ? totalNightsValue
+                          : peopleCount
+                        }
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              {/* Form Section */}
+              <form onSubmit={handleSubmit} className="md:w-2/3 flex flex-col space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-driftwood-brown">Name</label>
+                  <input type="text" value={customerName} onChange={e => setCustomerName(e.target.value)} required className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-0" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-driftwood-brown">Email</label>
+                  <input type="email" value={customerEmail} onChange={e => setCustomerEmail(e.target.value)} required className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-0" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1 text-driftwood-brown">Notes</label>
+                  <textarea value={notes} onChange={e => setNotes(e.target.value)} className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-0" />
+                </div>
+                <div className="flex flex-col sm:flex-row justify-end gap-4 pt-4 border-t border-gray-200">
+                  <button type="button" onClick={closeModal} className="px-4 py-2 text-driftwood-brown">Cancel</button>
+                  <button type="submit" disabled={isSending} className="px-4 py-2 bg-coral-pink text-white rounded-lg shadow hover:shadow-md transition">{isSending ? 'Sending...' : 'Send'}</button>
+                </div>
+                {sendSuccess === true && <p className="text-sm text-green-600">Your request has been sent!</p>}
+                {sendSuccess === false && <p className="text-sm text-red-600">Something went wrong. Please try again.</p>}
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
-};
+}));
+
+Hero.displayName = 'Hero';
 
 export default Hero;

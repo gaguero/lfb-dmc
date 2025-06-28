@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { memo } from 'react';
+import Image from 'next/image';
 import { Star, Quote, MessageCircle } from 'lucide-react';
 
-const Reviews = () => {
+const Reviews = memo(() => {
   const reviews = [
     {
       id: 1,
@@ -121,6 +122,8 @@ const Reviews = () => {
       </div>
     </section>
   );
-};
+});
+
+Reviews.displayName = 'Reviews';
 
 export default Reviews; 
