@@ -2,6 +2,8 @@ import type { Metadata, Viewport } from "next";
 import { Epilogue, Karla } from "next/font/google";
 import "./globals.css";
 import { DestinationProvider } from "@/contexts/DestinationContext";
+import Footer from "@/components/Footer";
+import Reviews from "@/components/Reviews";
 
 const epilogue = Epilogue({
   subsets: ["latin"],
@@ -74,7 +76,7 @@ export default function RootLayout({
         <DestinationProvider>
           {/* Mobile-First Responsive Container */}
           <div className="w-full px-4 pt-4 sm:pt-6 md:pt-10">
-            <div className="mx-auto shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-2xl border border-white/10 overflow-hidden pb-20 sm:pb-40 md:pb-80" 
+            <div className="mx-auto shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-2xl border border-white/10 overflow-hidden" 
                  style={{ width: '100%', maxWidth: '90%' }}>
               {/* Subtle gradient overlay for depth */}
               <div className="relative">
@@ -83,6 +85,8 @@ export default function RootLayout({
                 {/* Main Content */}
                 <div className="relative z-10">
                   {children}
+                  <Reviews />
+                  <Footer />
                 </div>
               </div>
             </div>
