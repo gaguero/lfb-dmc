@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { MapPin, MessageCircle, Mail, FileText, Download, Cloud, BookOpen } from 'lucide-react';
+import { MapPin, MessageCircle, Mail, Download, Cloud, BookOpen } from 'lucide-react';
 
 const Footer = () => {
   return (
@@ -96,7 +96,7 @@ const Footer = () => {
                 <Mail size={18} className="text-coral-pink flex-shrink-0" />
                 <div>
                   <a href="#" className="text-sm hover:text-coral-pink transition-colors block">Newsletter</a>
-                  <span className="text-xs text-sand-ivory/70">"Local Secrets"</span>
+                  <span className="text-xs text-sand-ivory/70">&ldquo;Local Secrets&rdquo;</span>
                 </div>
               </div>
               <div className="flex items-center gap-3">
