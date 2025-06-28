@@ -1,20 +1,85 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import { MapPin, Calendar, Search } from 'lucide-react';
 import { usePrimaryDestination, useDestination } from '@/contexts/DestinationContext';
+import { useDestinationContent } from '@/hooks/useDestinationContent';
 import { destinations } from '@/data/destinations';
 import DestinationDropdown from './DestinationDropdown';
+
+interface PathInfo {
+  d: string;
+}
 
 const Hero = () => {
   const { primaryDestination } = usePrimaryDestination();
   const { selectedDestinations } = useDestination();
+  const { combinedDescription, suggestedDuration } = useDestinationContent();
   
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const [paths, setPaths] = useState<PathInfo[]>([]);
+  const [mounted, setMounted] = useState(false);
   
   const currentDestination = primaryDestination || destinations.find(d => d.id === 'bocas-del-toro') || destinations[0];
-  const destinationsToShow = selectedDestinations.length > 0 ? selectedDestinations : [currentDestination];
+  
+  // Memoize destinationsToShow to prevent infinite re-renders in useEffect
+  const destinationsToShow = useMemo(() => {
+    return selectedDestinations.length > 0 ? selectedDestinations : [currentDestination];
+  }, [selectedDestinations, currentDestination]);
+
+  // Set mounted to true after component mounts on client side
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    // Only calculate paths if component is mounted (client-side)
+    if (!mounted) return;
+    
+    const calculatePaths = () => {
+      if (destinationsToShow.length <= 1) {
+        setPaths([]);
+        return;
+      }
+      const newPaths = destinationsToShow.slice(0, -1).map((_, index) => {
+        const startElement = document.querySelector<HTMLDivElement>(`[data-slice-id='slice-${destinationsToShow[index].id}']`);
+        const endElement = document.querySelector<HTMLDivElement>(`[data-slice-id='slice-${destinationsToShow[index + 1].id}']`);
+        
+        if (!startElement || !endElement) return null;
+
+        const containerRect = startElement.closest('.flex')?.parentElement?.getBoundingClientRect();
+        if(!containerRect) return null;
+
+        const startRect = startElement.getBoundingClientRect();
+        const endRect = endElement.getBoundingClientRect();
+
+        const startX = startRect.left - containerRect.left + startRect.width / 2;
+        const startY = startRect.bottom - containerRect.top - 30; // 30px from bottom of the image slice
+        const endX = endRect.left - containerRect.left + endRect.width / 2;
+        const endY = endRect.bottom - containerRect.top - 30;
+        
+        const controlX1 = startX + (endX - startX) * 0.3;
+        const controlY1 = startY - 50;
+        const controlX2 = startX + (endX - startX) * 0.7;
+        const controlY2 = endY - 50;
+
+        return {
+          d: `M ${startX} ${startY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${endX} ${endY}`
+        };
+      }).filter((path): path is PathInfo => path !== null);
+      
+      setPaths(newPaths);
+    }
+    
+    // Calculate paths on mount and whenever the hover state or destinations change.
+    calculatePaths();
+    
+    // Recalculate on window resize
+    window.addEventListener('resize', calculatePaths);
+    return () => window.removeEventListener('resize', calculatePaths);
+
+  }, [mounted, destinationsToShow, hoveredIndex]); // Added mounted as dependency
 
   return (
     <div className="bg-sand-ivory">
@@ -34,10 +99,7 @@ const Hero = () => {
           </div>
           <div className="w-full lg:w-[30%] flex flex-col justify-end">
             <p className="text-lg sm:text-xl leading-relaxed mb-6 sm:mb-8 text-driftwood-brown transition-all duration-300 ease-out">
-              {destinationsToShow.length > 1 
-                ? `Experience the best of ${destinationsToShow.map(d => d.name).join(', ')} in one unforgettable journey.`
-                : currentDestination.shortDescription
-              }
+              {combinedDescription}
             </p>
             <div>
               <button className="w-full sm:w-auto bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white font-semibold py-4 px-8 text-lg rounded-full shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 touch-target-comfort">
@@ -68,6 +130,7 @@ const Hero = () => {
                 return (
                   <div
                     key={`slice-${destination.id}`}
+                    data-slice-id={`slice-${destination.id}`}
                     className="relative h-full overflow-hidden transition-all duration-350 ease-in-out group"
                     style={{
                       width: width,
@@ -101,6 +164,30 @@ const Hero = () => {
                 );
               })}
             </div>
+
+            {/* Path visualization for multi-destination */}
+            {mounted && paths.length > 0 && (
+              <svg className="absolute inset-0 w-full h-full pointer-events-none z-20" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style={{stopColor: 'rgba(255,255,255,0.7)', stopOpacity: 1}} />
+                    <stop offset="100%" style={{stopColor: 'rgba(240,142,128,0.8)', stopOpacity: 1}} />
+                  </linearGradient>
+                </defs>
+                {paths.map((path, index) => (
+                  <path
+                    key={`path-${index}`}
+                    d={path.d}
+                    stroke="url(#pathGradient)"
+                    strokeWidth="2"
+                    fill="none"
+                    strokeDasharray="5, 5"
+                    className="transition-all duration-350 ease-in-out"
+                  />
+                ))}
+              </svg>
+            )}
+
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/10 to-transparent pointer-events-none z-5"></div>
             {destinationsToShow.length > 1 && (
               <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-semibold shadow-xl border border-white/20 z-30">
@@ -172,10 +259,7 @@ const Hero = () => {
                       Check Out
                     </div>
                     <div className="text-sm sm:text-base font-semibold text-gray-900 truncate">
-                      {selectedDestinations.length > 1 
-                        ? `${Math.max(...selectedDestinations.map(d => parseInt(d.targetDuration.split(' ')[0])))} days`
-                        : currentDestination.targetDuration
-                      }
+                      {suggestedDuration}
                     </div>
                   </div>
                 </div>

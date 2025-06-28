@@ -5,7 +5,7 @@
  * Manages primary destination selection and multi-destination combinations
  */
 
-import { createContext, useState, useCallback, useContext } from 'react';
+import { createContext, useState, useCallback, useContext, useMemo } from 'react';
 import { Destination } from '../types/destination';
 import { MAX_DESTINATIONS } from '../data/destinations';
 
@@ -22,6 +22,9 @@ export interface DestinationContextType {
   
   /** Set the primary destination (main destination context) */
   setPrimaryDestination: (destination: Destination) => void;
+  
+  /** Set only this destination as selected (clear all others) - for navbar use */
+  setPrimaryDestinationOnly: (destination: Destination) => void;
   
   /** Add a destination to the selection (unlimited) */
   addDestination: (destination: Destination) => void;
@@ -92,6 +95,16 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
   }, []);
   
   /**
+   * Set only this destination as selected (clear all others) - for navbar use
+   * @param destination - The destination to set as the only selected destination
+   */
+  const setPrimaryDestinationOnly = useCallback((destination: Destination) => {
+    setPrimaryDestinationState(destination);
+    // Clear all selections and set only this destination
+    setSelectedDestinations([destination]);
+  }, []);
+  
+  /**
    * Add a destination to the selection (unlimited)
    * @param destination - The destination to add
    */
@@ -116,17 +129,22 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
       const filtered = current.filter(dest => dest.id !== destinationId);
       
       // If we removed the primary destination, clear it or set a new one
-      if (primaryDestination?.id === destinationId) {
-        if (filtered.length > 0) {
-          setPrimaryDestinationState(filtered[0]);
-        } else {
-          setPrimaryDestinationState(null);
+      // Access current primary destination through state updater
+      setPrimaryDestinationState(currentPrimary => {
+        if (currentPrimary?.id === destinationId) {
+          // If we removed the primary destination
+          if (filtered.length > 0) {
+            return filtered[0]; // Set first remaining as primary
+          } else {
+            return null; // No destinations left
+          }
         }
-      }
+        return currentPrimary; // Keep current primary unchanged
+      });
       
       return filtered;
     });
-  }, [primaryDestination]);
+  }, []); // Remove primaryDestination from dependencies to prevent infinite loop
   
   /**
    * Clear all destination selections
@@ -149,18 +167,24 @@ export function DestinationProvider({ children }: DestinationProviderProps) {
   const isMaxDestinationsReached = false; // No limit anymore
   const selectedCount = selectedDestinations.length;
   
-  // Context value object containing all state and functions
-  const contextValue: DestinationContextType = {
+  // Context value object containing all state and functions - memoized to prevent infinite re-renders
+  // Only include state values in dependencies, not memoized functions
+  const contextValue: DestinationContextType = useMemo(() => ({
     primaryDestination,
     selectedDestinations,
     setPrimaryDestination,
+    setPrimaryDestinationOnly,
     addDestination,
     removeDestination,
     clearDestinations,
     isDestinationSelected,
     isMaxDestinationsReached,
     selectedCount
-  };
+  }), [
+    primaryDestination,
+    selectedDestinations,
+    selectedCount
+  ]);
   
   return (
     <DestinationContext.Provider value={contextValue}>
@@ -269,7 +293,7 @@ export function useDestinationSelection() {
  * Useful for components that only need to work with the primary destination
  */
 export function usePrimaryDestination() {
-  const { primaryDestination, setPrimaryDestination } = useDestination();
+  const { primaryDestination, setPrimaryDestination, setPrimaryDestinationOnly } = useDestination();
   
   /**
    * Check if a specific destination is the primary destination
@@ -281,6 +305,7 @@ export function usePrimaryDestination() {
   return {
     primaryDestination,
     setPrimaryDestination,
+    setPrimaryDestinationOnly,
     isPrimaryDestination,
     hasPrimaryDestination: primaryDestination !== null
   };
