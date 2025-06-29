@@ -3,7 +3,7 @@
 import React from 'react';
 import { MapPin, Check } from 'lucide-react';
 import { destinations } from '@/data/destinations';
-import { useDestination } from '@/contexts/DestinationContext';
+import { useDestination } from '@/contexts/DestinationCompatibilityHooks';
 
 /**
  * DestinationMultiSelect Component

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useDestination } from '../contexts/DestinationContext';
+import { useDestination } from '../contexts/DestinationCompatibilityHooks';
 
 /**
  * A custom hook to generate dynamic content based on selected destinations.

@@ -1,63 +1,25 @@
-import { renderHook } from '@testing-library/react';
+import { renderHook, act } from '@testing-library/react';
 import { useDestinationNavigation } from './useDestinationNavigation';
-import { useDestination } from '../contexts/DestinationContext';
-import { Destination } from '../types/destination';
+import { OptimizedDestinationProvider } from '../contexts/OptimizedDestinationProvider';
+import { destinations } from '../data/destinations';
+import { ReactNode } from 'react';
 
-// Mock the context
-jest.mock('../contexts/DestinationContext');
+// Use real destinations data for testing
+const realDestinations = destinations;
 
-const mockDestinations: Destination[] = [
-  {
-    id: 'dest-1',
-    name: 'Destination 1',
-    image: '/dest1.jpg',
-    description: 'First destination',
-    features: ['feature1'],
-    suggestedDuration: '2-3 days'
-  },
-  {
-    id: 'dest-2',
-    name: 'Destination 2',
-    image: '/dest2.jpg',
-    description: 'Second destination',
-    features: ['feature2'],
-    suggestedDuration: '3-4 days'
-  },
-  {
-    id: 'dest-3',
-    name: 'Destination 3',
-    image: '/dest3.jpg',
-    description: 'Third destination',
-    features: ['feature3'],
-    suggestedDuration: '4-5 days'
-  }
-];
-
-const mockUseDestination = useDestination as jest.MockedFunction<typeof useDestination>;
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <OptimizedDestinationProvider>
+    {children}
+  </OptimizedDestinationProvider>
+);
 
 describe('useDestinationNavigation', () => {
-  const mockSetPrimaryDestination = jest.fn();
-  const mockSetPrimaryDestinationOnly = jest.fn();
-
   beforeEach(() => {
-    jest.clearAllMocks();
-    mockUseDestination.mockReturnValue({
-      destinations: mockDestinations,
-      setPrimaryDestination: mockSetPrimaryDestination,
-      setPrimaryDestinationOnly: mockSetPrimaryDestinationOnly,
-      primaryDestination: mockDestinations[0],
-      selectedDestinations: [mockDestinations[0], mockDestinations[1]],
-      currentDestination: mockDestinations[0],
-      selectDestination: jest.fn(),
-      deselectDestination: jest.fn(),
-      toggleDestination: jest.fn(),
-      clearSelections: jest.fn(),
-      isDestinationSelected: jest.fn()
-    });
+    // No mocking needed - using real provider
   });
 
   it('should return navigation utilities', () => {
-    const { result } = renderHook(() => useDestinationNavigation());
+    const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
 
     expect(result.current).toHaveProperty('navigateToDestination');
     expect(result.current).toHaveProperty('navigateToDestinationOnly');
@@ -73,183 +35,192 @@ describe('useDestinationNavigation', () => {
 
   describe('navigateToDestination', () => {
     it('should navigate to destination by ID', () => {
-      const { result } = renderHook(() => useDestinationNavigation());
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
       
-      result.current.navigateToDestination('dest-2');
+      act(() => {
+        result.current.navigateToDestination('chiriqui');
+      });
       
-      expect(mockSetPrimaryDestination).toHaveBeenCalledWith(mockDestinations[1]);
+      expect(result.current.currentDestination?.id).toBe('chiriqui');
     });
 
-    it('should not call setPrimaryDestination for invalid ID', () => {
-      const { result } = renderHook(() => useDestinationNavigation());
+    it('should not change destination for invalid ID', () => {
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
+      const initialDestination = result.current.currentDestination;
       
-      result.current.navigateToDestination('invalid-id');
+      act(() => {
+        result.current.navigateToDestination('invalid-id');
+      });
       
-      expect(mockSetPrimaryDestination).not.toHaveBeenCalled();
+      expect(result.current.currentDestination).toBe(initialDestination);
     });
   });
 
   describe('navigateToDestinationOnly', () => {
     it('should navigate to destination exclusively by ID', () => {
-      const { result } = renderHook(() => useDestinationNavigation());
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
       
-      result.current.navigateToDestinationOnly('dest-3');
+      act(() => {
+        result.current.navigateToDestinationOnly('las-perlas');
+      });
       
-      expect(mockSetPrimaryDestinationOnly).toHaveBeenCalledWith(mockDestinations[2]);
+      expect(result.current.currentDestination?.id).toBe('las-perlas');
     });
 
-    it('should not call setPrimaryDestinationOnly for invalid ID', () => {
-      const { result } = renderHook(() => useDestinationNavigation());
+    it('should not change destination for invalid ID', () => {
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
+      const initialDestination = result.current.currentDestination;
       
-      result.current.navigateToDestinationOnly('invalid-id');
+      act(() => {
+        result.current.navigateToDestinationOnly('invalid-id');
+      });
       
-      expect(mockSetPrimaryDestinationOnly).not.toHaveBeenCalled();
+      expect(result.current.currentDestination).toBe(initialDestination);
     });
   });
 
   describe('navigateToDestinationDirect', () => {
     it('should navigate to destination object directly', () => {
-      const { result } = renderHook(() => useDestinationNavigation());
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
+      const targetDestination = realDestinations[2];
       
-      result.current.navigateToDestinationDirect(mockDestinations[2]);
+      act(() => {
+        result.current.navigateToDestinationDirect(targetDestination);
+      });
       
-      expect(mockSetPrimaryDestination).toHaveBeenCalledWith(mockDestinations[2]);
+      expect(result.current.currentDestination?.id).toBe(targetDestination.id);
     });
   });
 
   describe('navigateToDestinationOnlyDirect', () => {
     it('should navigate to destination exclusively with object', () => {
-      const { result } = renderHook(() => useDestinationNavigation());
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
+      const targetDestination = realDestinations[1];
       
-      result.current.navigateToDestinationOnlyDirect(mockDestinations[1]);
+      act(() => {
+        result.current.navigateToDestinationOnlyDirect(targetDestination);
+      });
       
-      expect(mockSetPrimaryDestinationOnly).toHaveBeenCalledWith(mockDestinations[1]);
+      expect(result.current.currentDestination?.id).toBe(targetDestination.id);
     });
   });
 
   describe('getNavigationState', () => {
     it('should return correct navigation state', () => {
-      const { result } = renderHook(() => useDestinationNavigation());
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
       
       const state = result.current.getNavigationState();
       
       expect(state).toEqual({
-        currentDestination: mockDestinations[0],
-        hasMultipleDestinations: true,
-        destinationCount: 2,
+        currentDestination: realDestinations[0], // Bocas del Toro is the default
+        hasMultipleDestinations: false,
+        destinationCount: 1,
         canNavigateBack: true,
-        availableDestinations: mockDestinations
+        availableDestinations: realDestinations
       });
     });
   });
 
   describe('isDestinationActive', () => {
     it('should return true for active destination', () => {
-      const { result } = renderHook(() => useDestinationNavigation());
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
       
-      expect(result.current.isDestinationActive('dest-1')).toBe(true);
+      act(() => {
+        result.current.navigateToDestination('bocas-del-toro');
+      });
+      
+      expect(result.current.isDestinationActive('bocas-del-toro')).toBe(true);
     });
 
     it('should return false for inactive destination', () => {
-      const { result } = renderHook(() => useDestinationNavigation());
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
       
-      expect(result.current.isDestinationActive('dest-2')).toBe(false);
+      act(() => {
+        result.current.navigateToDestination('bocas-del-toro');
+      });
+      
+      expect(result.current.isDestinationActive('chiriqui')).toBe(false);
     });
   });
 
   describe('getNextDestination', () => {
-    it('should return next destination in list', () => {
-      const { result } = renderHook(() => useDestinationNavigation());
+    it('should return next destination when current is set', () => {
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
+      
+      act(() => {
+        result.current.navigateToDestination(realDestinations[0].id);
+      });
       
       const nextDestination = result.current.getNextDestination();
-      
-      expect(nextDestination).toEqual(mockDestinations[1]);
+      expect(nextDestination?.id).toBe(realDestinations[1].id);
     });
 
     it('should wrap around to first destination when at end', () => {
-      mockUseDestination.mockReturnValue({
-        destinations: mockDestinations,
-        setPrimaryDestination: mockSetPrimaryDestination,
-        setPrimaryDestinationOnly: mockSetPrimaryDestinationOnly,
-        primaryDestination: mockDestinations[2], // Last destination
-        selectedDestinations: [mockDestinations[2]],
-        currentDestination: mockDestinations[2],
-        selectDestination: jest.fn(),
-        deselectDestination: jest.fn(),
-        toggleDestination: jest.fn(),
-        clearSelections: jest.fn(),
-        isDestinationSelected: jest.fn()
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
+      const lastDestination = realDestinations[realDestinations.length - 1];
+      
+      act(() => {
+        result.current.navigateToDestination(lastDestination.id);
       });
-
-      const { result } = renderHook(() => useDestinationNavigation());
       
       const nextDestination = result.current.getNextDestination();
-      
-      expect(nextDestination).toEqual(mockDestinations[0]);
+      expect(nextDestination?.id).toBe(realDestinations[0].id);
     });
   });
 
   describe('getPreviousDestination', () => {
-    it('should return previous destination in list', () => {
-      mockUseDestination.mockReturnValue({
-        destinations: mockDestinations,
-        setPrimaryDestination: mockSetPrimaryDestination,
-        setPrimaryDestinationOnly: mockSetPrimaryDestinationOnly,
-        primaryDestination: mockDestinations[1], // Middle destination
-        selectedDestinations: [mockDestinations[1]],
-        currentDestination: mockDestinations[1],
-        selectDestination: jest.fn(),
-        deselectDestination: jest.fn(),
-        toggleDestination: jest.fn(),
-        clearSelections: jest.fn(),
-        isDestinationSelected: jest.fn()
+    it('should return previous destination when current is set', () => {
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
+      
+      act(() => {
+        result.current.navigateToDestination(realDestinations[1].id);
       });
-
-      const { result } = renderHook(() => useDestinationNavigation());
       
       const prevDestination = result.current.getPreviousDestination();
-      
-      expect(prevDestination).toEqual(mockDestinations[0]);
+      expect(prevDestination?.id).toBe(realDestinations[0].id);
     });
 
     it('should wrap around to last destination when at beginning', () => {
-      const { result } = renderHook(() => useDestinationNavigation());
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
+      
+      act(() => {
+        result.current.navigateToDestination(realDestinations[0].id);
+      });
       
       const prevDestination = result.current.getPreviousDestination();
-      
-      expect(prevDestination).toEqual(mockDestinations[2]);
+      expect(prevDestination?.id).toBe(realDestinations[realDestinations.length - 1].id);
     });
   });
 
   describe('convenience properties', () => {
     it('should provide currentDestination', () => {
-      const { result } = renderHook(() => useDestinationNavigation());
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
       
-      expect(result.current.currentDestination).toEqual(mockDestinations[0]);
+      act(() => {
+        result.current.navigateToDestination(realDestinations[0].id);
+      });
+      
+      expect(result.current.currentDestination?.id).toBe(realDestinations[0].id);
     });
 
-    it('should provide hasMultipleDestinations', () => {
-      const { result } = renderHook(() => useDestinationNavigation());
+    it('should provide hasMultipleDestinations when multiple destinations are selected', () => {
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
       
+      act(() => {
+        result.current.navigateToDestination('bocas-del-toro');
+        result.current.navigateToDestination('chiriqui'); // This should add to selection
+      });
+      
+      // Should be true when multiple destinations are selected
       expect(result.current.hasMultipleDestinations).toBe(true);
     });
 
     it('should return false for hasMultipleDestinations when only one selected', () => {
-      mockUseDestination.mockReturnValue({
-        destinations: mockDestinations,
-        setPrimaryDestination: mockSetPrimaryDestination,
-        setPrimaryDestinationOnly: mockSetPrimaryDestinationOnly,
-        primaryDestination: mockDestinations[0],
-        selectedDestinations: [mockDestinations[0]], // Only one selected
-        currentDestination: mockDestinations[0],
-        selectDestination: jest.fn(),
-        deselectDestination: jest.fn(),
-        toggleDestination: jest.fn(),
-        clearSelections: jest.fn(),
-        isDestinationSelected: jest.fn()
+      const { result } = renderHook(() => useDestinationNavigation(), { wrapper });
+      
+      act(() => {
+        result.current.navigateToDestination(realDestinations[0].id);
       });
-
-      const { result } = renderHook(() => useDestinationNavigation());
       
       expect(result.current.hasMultipleDestinations).toBe(false);
     });
