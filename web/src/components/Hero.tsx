@@ -126,11 +126,6 @@ const Hero = memo(forwardRef<HTMLDivElement>((props, ref) => {
             <p className="text-lg sm:text-xl leading-relaxed mb-6 sm:mb-8 text-driftwood-brown transition-all duration-300 ease-out">
               {combinedDescription}
             </p>
-            <div>
-              <button className="w-full sm:w-auto bg-gradient-to-r from-coral-pink to-coral-pink/90 text-white font-semibold py-4 px-8 text-lg rounded-full shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 touch-target-comfort">
-                Plan Your Trip
-              </button>
-            </div>
           </div>
         </div>
 
