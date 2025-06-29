@@ -1,12 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import Image from 'next/image';
 import { User, Menu, X } from 'lucide-react';
 import { usePrimaryDestination } from '@/contexts/DestinationContext';
 import { destinations } from '@/data/destinations';
 
-const Navbar = () => {
+const Navbar = memo(() => {
   const { primaryDestination, setPrimaryDestinationOnly } = usePrimaryDestination();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -71,7 +71,7 @@ const Navbar = () => {
             </div>
             
             {/* Desktop Navigation - Hidden on mobile */}
-            <nav className="hidden md:flex flex-1 justify-center pt-1">
+            <nav className="hidden md:flex flex-1 justify-center pt-0">
               <div className="flex items-center bg-white rounded-full px-4 lg:px-6 py-2 lg:py-3 shadow-lg">
                 <div className="flex items-center space-x-2 lg:space-x-4 text-sm font-medium">
                   {destinations.map((destination) => (
@@ -148,6 +148,8 @@ const Navbar = () => {
       </header>
     </>
   );
-};
+});
+
+Navbar.displayName = 'Navbar';
 
 export default Navbar; 

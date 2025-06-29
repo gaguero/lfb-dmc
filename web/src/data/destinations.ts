@@ -16,8 +16,8 @@ export const destinations: Destination[] = [
     name: 'Bocas del Toro',
     description: 'Your trusted local gateway to the Caribbean paradise of Bocas del Toro. Experience authentic adventures with our expert local knowledge. From pristine beaches and crystal-clear waters to vibrant coral reefs and diverse wildlife, Bocas offers the perfect blend of relaxation and adventure in Panama\'s most beautiful Caribbean archipelago.',
     shortDescription: 'Caribbean paradise with pristine beaches, coral reefs, and authentic island adventures.',
-    image: 'https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&h=800&fit=crop&crop=center', // Bocas del Toro Caribbean paradise
-    mobileImage: '/destinations/bocas-mobile.jpg',
+    image: '/mountain-hero.png',
+    mobileImage: '/mountain-hero.png',
     theme: 'Caribbean',
     primaryActivities: [
       'Island hopping',
@@ -44,7 +44,7 @@ export const destinations: Destination[] = [
     name: 'Chiriquí',
     description: 'Discover Panama\'s highland paradise where coffee plantations meet cloud forests and volcanic peaks. Chiriquí offers the perfect escape for adventure seekers and culture enthusiasts, with world-renowned coffee tours, challenging hikes, and breathtaking mountain landscapes that showcase Panama\'s incredible biodiversity.',
     shortDescription: 'Mountain paradise with coffee plantations, volcano hiking, and cloud forest adventures.',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop&crop=center', // Chiriquí mountains
+    image: '/chiriqui.png',
     mobileImage: '/destinations/chiriqui-mobile.jpg',
     theme: 'Mountain',
     primaryActivities: [
@@ -72,8 +72,8 @@ export const destinations: Destination[] = [
     name: 'Las Perlas',
     description: 'Escape to the exclusive Pacific paradise of Las Perlas archipelago, where pristine beaches meet luxury accommodations and world-class fishing. This collection of 90+ islands offers unparalleled tranquility, crystal-clear Pacific waters, and the rich history of Panama\'s pearl diving heritage in an intimate, sophisticated setting.',
     shortDescription: 'Exclusive Pacific islands with luxury resorts, pristine beaches, and pearl diving history.',
-    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=1200&h=800&fit=crop&crop=center', // Pacific island paradise
-    mobileImage: '/destinations/perlas-mobile.jpg',
+    image: '/Pearl-Island.webp',
+    mobileImage: '/Pearl-Island.webp',
     theme: 'Pacific Islands',
     primaryActivities: [
       'Luxury island hopping',
@@ -92,7 +92,7 @@ export const destinations: Destination[] = [
       'World-class fishing',
       'Pacific sunset views'
     ]
-    },
+  },
 
   // Guna Yala - Indigenous culture and San Blas islands
   {
@@ -100,8 +100,8 @@ export const destinations: Destination[] = [
     name: 'Guna Yala',
     description: 'Experience authentic indigenous culture in the pristine San Blas islands of Guna Yala, an autonomous Guna territory offering unique insights into traditional Caribbean coast life. This untouched paradise features crystal-clear waters, traditional sailing vessels, and the opportunity to connect with the vibrant Guna people and their ancient customs.',
     shortDescription: 'Authentic indigenous culture, traditional island life, and pristine San Blas archipelago.',
-    image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&h=800&fit=crop&crop=top', // Traditional San Blas sailing
-    mobileImage: '/destinations/guna-yala-mobile.jpg',
+    image: '/Guna yala.jpg',
+    mobileImage: '/Guna yala.jpg',
     theme: 'Indigenous Culture',
     primaryActivities: [
       'Cultural immersion',
@@ -128,7 +128,7 @@ export const destinations: Destination[] = [
     name: 'Panama Ciudad',
     description: 'Discover the cosmopolitan heart of Panama where historic colonial charm meets modern urban sophistication. Panama City offers world-class dining, impressive skyline views, and the engineering marvel of the Panama Canal, making it the perfect gateway for business travelers and culture enthusiasts exploring Panama\'s rich heritage.',
     shortDescription: 'Cosmopolitan capital with historic charm, Panama Canal, and modern urban experiences.',
-    image: 'https://images.unsplash.com/photo-1581833971358-2c8b550f87b3?w=1200&h=800&fit=crop&crop=center', // Panama City skyline
+    image: '/Panama City hero.png',
     mobileImage: '/destinations/panama-ciudad-mobile.jpg',
     theme: 'Urban',
     primaryActivities: [
