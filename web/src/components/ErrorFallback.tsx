@@ -32,7 +32,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
   error,
   resetErrorBoundary,
   title = "Oops! Something went wrong",
-  message = "We're sorry, but something unexpected happened. Please try again or contact support if the problem persists.",
+  message = "We&apos;re sorry, but something unexpected happened. Please try again or contact support if the problem persists.",
   showDetails = process.env.NODE_ENV === 'development',
   maxRetries = 3
 }) => {
