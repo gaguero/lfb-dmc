@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { useDestination } from '../contexts/DestinationContext';
 import { Destination } from '../types/destination';
+import { destinations } from '../data/destinations';
 
 /**
  * A custom hook for handling destination navigation and routing logic.
@@ -10,7 +11,6 @@ import { Destination } from '../types/destination';
  */
 export const useDestinationNavigation = () => {
   const { 
-    destinations, 
     setPrimaryDestination, 
     setPrimaryDestinationOnly,
     primaryDestination,

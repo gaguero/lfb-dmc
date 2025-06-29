@@ -28,16 +28,9 @@ export const useDestinationImages = () => {
   /**
    * Generates an optimized image URL for different sizes
    * @param destination - The destination object
-   * @param size - The desired image size
    * @returns Optimized image URL string
    */
-  const getOptimizedImageUrl = useCallback((destination: Destination, size: 'small' | 'medium' | 'large' = 'medium') => {
-    const sizeMap = {
-      small: '400w',
-      medium: '800w',
-      large: '1200w'
-    };
-    
+  const getOptimizedImageUrl = useCallback((destination: Destination) => {
     // For now, return the original image URL
     // In the future, this could be enhanced to generate different sized URLs
     // if the backend supports dynamic image resizing

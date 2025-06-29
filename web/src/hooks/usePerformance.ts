@@ -49,7 +49,7 @@ export const usePerformance = (componentName: string) => {
    * Stable callback helper that can be used with useCallback
    * Note: This returns a function that can be used with useCallback
    */
-  const stableCallback = useCallback(<T extends (...args: any[]) => any>(
+  const stableCallback = useCallback(<T extends (...args: unknown[]) => unknown>(
     callback: T,
     deps: React.DependencyList
   ) => {
@@ -86,7 +86,7 @@ export const usePerformance = (componentName: string) => {
   /**
    * Shallow comparison for object dependencies
    */
-  const shallowEqual = useCallback((obj1: any, obj2: any): boolean => {
+  const shallowEqual = useCallback((obj1: Record<string, unknown>, obj2: Record<string, unknown>): boolean => {
     const keys1 = Object.keys(obj1);
     const keys2 = Object.keys(obj2);
 
@@ -94,7 +94,7 @@ export const usePerformance = (componentName: string) => {
       return false;
     }
 
-    for (let key of keys1) {
+    for (const key of keys1) {
       if (obj1[key] !== obj2[key]) {
         return false;
       }

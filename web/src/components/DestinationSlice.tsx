@@ -12,7 +12,6 @@ interface DestinationSliceProps {
   hasHover: boolean;
   numDestinations: number;
   width: string;
-  primaryDestinationId?: string;
   onMouseEnter: () => void;
   onMouseLeave: () => void;
 }
@@ -28,7 +27,6 @@ const DestinationSlice = memo<DestinationSliceProps>(({
   hasHover,
   numDestinations,
   width,
-  primaryDestinationId,
   onMouseEnter,
   onMouseLeave
 }) => {

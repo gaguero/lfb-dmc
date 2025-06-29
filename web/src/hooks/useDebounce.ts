@@ -30,15 +30,13 @@ export const useDebounce = <T>(value: T, delay: number): T => {
  *
  * @param callback - The function to debounce
  * @param delay - The delay in milliseconds
- * @param deps - Dependencies array for the callback
  * @returns A debounced version of the callback
  */
-export const useDebouncedCallback = <T extends (...args: any[]) => any>(
+export const useDebouncedCallback = <T extends (...args: unknown[]) => unknown>(
   callback: T,
-  delay: number,
-  deps: React.DependencyList = []
+  delay: number
 ): T => {
-  const timeoutRef = useRef<NodeJS.Timeout>();
+  const timeoutRef = useRef<NodeJS.Timeout | undefined>(undefined);
 
   const debouncedCallback = useCallback(
     (...args: Parameters<T>) => {
@@ -50,7 +48,7 @@ export const useDebouncedCallback = <T extends (...args: any[]) => any>(
         callback(...args);
       }, delay);
     },
-    [callback, delay, ...deps]
+    [callback, delay]
   ) as T;
 
   // Cleanup timeout on unmount
