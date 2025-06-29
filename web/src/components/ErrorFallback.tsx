@@ -96,7 +96,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
           </div>
           
           <h2 className="text-2xl font-bold text-deep-cacao mb-4">
-            We're having trouble recovering
+            We&apos;re having trouble recovering
           </h2>
           
           <p className="text-driftwood-brown mb-8">
