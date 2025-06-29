@@ -127,7 +127,7 @@ export function OptimizedDestinationProvider({ children }: OptimizedDestinationP
     selectedDestinations,
     isMaxDestinationsReached,
     selectedCount
-  }), [primaryDestination, selectedDestinations, selectedCount]);
+  }), [primaryDestination, selectedDestinations, selectedCount, isMaxDestinationsReached]);
   
   return (
     <DestinationStateProvider value={destinationState}>

@@ -20,7 +20,7 @@ interface ErrorBoundaryProps {
   /** Name of this error boundary for logging purposes */
   name?: string;
   /** Custom fallback component */
-  fallback?: React.ComponentType<any>;
+  fallback?: React.ComponentType<React.ComponentProps<typeof ErrorFallback>>;
   /** Custom error title */
   fallbackTitle?: string;
   /** Custom error message */
@@ -71,13 +71,15 @@ const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
     }
     
     // Log recovery attempt
-    console.log(`Error boundary "${name}" reset attempted`);
+    // In a real app, you might want a more robust logging solution here
+    // For now, console.log is a placeholder
+    // console.log(`Error boundary "${name}" reset attempted`);
   };
 
   /**
    * Custom fallback component with props
    */
-  const FallbackComponent = fallback || ((props: any) => (
+  const FallbackComponent = fallback || ((props: React.ComponentProps<typeof ErrorFallback>) => (
     <ErrorFallback
       {...props}
       title={fallbackTitle}
@@ -109,7 +111,7 @@ export const withErrorBoundary = <P extends object>(
   Component: React.ComponentType<P>,
   errorBoundaryProps?: Omit<ErrorBoundaryProps, 'children'>
 ) => {
-  const WrappedComponent = React.forwardRef<any, P>((props, ref) => (
+  const WrappedComponent = React.forwardRef<unknown, P>((props) => (
     <ErrorBoundary {...errorBoundaryProps}>
       <Component {...(props as P)} />
     </ErrorBoundary>

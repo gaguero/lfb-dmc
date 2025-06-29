@@ -28,7 +28,7 @@ export default function NotFound() {
           </h2>
           
           <p className="text-gray-600 mb-8">
-            Looks like this page wandered off the beaten path. Let's get you back to exploring Panama's beautiful destinations!
+            Looks like this page wandered off the beaten path. Let&apos;s get you back to exploring Panama&apos;s beautiful destinations!
           </p>
 
           {/* Action Buttons */}

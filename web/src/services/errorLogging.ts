@@ -133,8 +133,8 @@ export const logError = (
 export const trackError = (error: Error, context: Partial<ErrorContext> = {}): void => {
   // This would integrate with your analytics service
   // For now, we'll log it for tracking purposes
-  if (typeof window !== 'undefined' && (window as any).gtag) {
-    (window as any).gtag('event', 'exception', {
+  if (typeof window !== 'undefined' && (window as Window & typeof globalThis & { gtag?: (...args: unknown[]) => void }).gtag) {
+    (window as Window & typeof globalThis & { gtag?: (...args: unknown[]) => void }).gtag('event', 'exception', {
       description: error.message,
       fatal: false,
       error_boundary: context.errorBoundary || 'unknown',

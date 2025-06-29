@@ -37,9 +37,9 @@ const ErrorBoundaryDemo: React.FC = () => {
   };
 
   const triggerTypeError = () => {
-    // @ts-ignore - Intentionally trigger a TypeError
-    const obj: any = null;
-    console.log(obj.property.that.does.not.exist);
+    // @ts-expect-error - Intentionally trigger a TypeError
+    const obj: { property?: { that?: { does?: { not?: { exist: string } } } } } = null;
+    console.log(obj.property?.that?.does?.not?.exist);
   };
 
   const triggerNetworkError = async () => {
@@ -48,7 +48,7 @@ const ErrorBoundaryDemo: React.FC = () => {
         method: 'POST',
         body: JSON.stringify({ test: 'data' })
       });
-    } catch (error) {
+    } catch {
       throwError(new Error('Test network error - This is intentional for testing error boundaries'));
     }
   };

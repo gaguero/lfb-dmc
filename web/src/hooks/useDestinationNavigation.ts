@@ -27,7 +27,7 @@ export const useDestinationNavigation = () => {
     if (destination) {
       setPrimaryDestination(destination);
     }
-  }, [destinations, setPrimaryDestination]);
+  }, [setPrimaryDestination]);
 
   /**
    * Navigate to a destination and make it the only selection (navbar behavior)
@@ -39,7 +39,7 @@ export const useDestinationNavigation = () => {
     if (destination) {
       setPrimaryDestinationOnly(destination);
     }
-  }, [destinations, setPrimaryDestinationOnly]);
+  }, [setPrimaryDestinationOnly]);
 
   /**
    * Navigate to a destination object directly
@@ -69,7 +69,7 @@ export const useDestinationNavigation = () => {
       canNavigateBack: selectedDestinations.length > 0,
       availableDestinations: destinations
     };
-  }, [primaryDestination, selectedDestinations, destinations]);
+  }, [primaryDestination, selectedDestinations]);
 
   /**
    * Check if a destination is currently active (primary)
@@ -90,7 +90,7 @@ export const useDestinationNavigation = () => {
     const currentIndex = destinations.findIndex(d => d.id === primaryDestination.id);
     const nextIndex = (currentIndex + 1) % destinations.length;
     return destinations[nextIndex];
-  }, [primaryDestination, destinations]);
+  }, [primaryDestination]);
 
   /**
    * Get the previous destination in the list (for navigation controls)
@@ -102,7 +102,7 @@ export const useDestinationNavigation = () => {
     const currentIndex = destinations.findIndex(d => d.id === primaryDestination.id);
     const prevIndex = currentIndex === 0 ? destinations.length - 1 : currentIndex - 1;
     return destinations[prevIndex];
-  }, [primaryDestination, destinations]);
+  }, [primaryDestination]);
 
   return {
     // Navigation actions

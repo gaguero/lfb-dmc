@@ -100,7 +100,7 @@ const ErrorFallback: React.FC<ErrorFallbackProps> = ({
           </h2>
           
           <p className="text-driftwood-brown mb-8">
-            We've tried to fix this several times but the problem persists. 
+            We&apos;ve tried to fix this several times but the problem persists. 
             Please refresh the page or contact our support team.
           </p>
           
