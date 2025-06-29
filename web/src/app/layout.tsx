@@ -3,7 +3,6 @@ import { Epilogue, Karla } from "next/font/google";
 import "./globals.css";
 import { DestinationProvider } from "@/contexts/DestinationContext";
 import Footer from "@/components/Footer";
-import Reviews from "@/components/Reviews";
 
 const epilogue = Epilogue({
   subsets: ["latin"],
@@ -85,7 +84,6 @@ export default function RootLayout({
                 {/* Main Content */}
                 <div className="relative z-10">
                   {children}
-                  <Reviews />
                   <Footer />
                 </div>
               </div>
