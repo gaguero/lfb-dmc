@@ -16,8 +16,8 @@ export const destinations: Destination[] = [
     name: 'Bocas del Toro',
     description: 'Your trusted local gateway to the Caribbean paradise of Bocas del Toro. Experience authentic adventures with our expert local knowledge. From pristine beaches and crystal-clear waters to vibrant coral reefs and diverse wildlife, Bocas offers the perfect blend of relaxation and adventure in Panama\'s most beautiful Caribbean archipelago.',
     shortDescription: 'Caribbean paradise with pristine beaches, coral reefs, and authentic island adventures.',
-    image: '/Bocas del toro.png',
-    mobileImage: '/destinations/bocas-mobile.jpg',
+    image: '/Bocas_del_toro.png',
+    mobileImage: '/Bocas_del_toro.png',
     theme: 'Caribbean',
     primaryActivities: [
       'Island hopping',
