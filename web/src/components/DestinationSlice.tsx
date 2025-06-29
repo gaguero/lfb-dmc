@@ -48,6 +48,7 @@ const DestinationSlice = memo<DestinationSliceProps>(({
     >
       <Image
         {...getImageProps(destination, index)}
+        alt={destination.name}
         className="transition-transform duration-350 ease-in-out object-cover w-full h-full"
         style={{
           transform: isHovered ? 'scale(1.05)' : 'scale(1)',

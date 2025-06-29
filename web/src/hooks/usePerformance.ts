@@ -1,4 +1,4 @@
-import { useMemo, useCallback, useRef, useEffect } from 'react';
+import { useCallback, useRef, useEffect } from 'react';
 
 /**
  * A custom hook that provides performance optimization utilities.

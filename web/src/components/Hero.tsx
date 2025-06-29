@@ -8,7 +8,7 @@ import { useDestinationContent, useDestinationImages, usePerformance } from '@/h
 import { destinations } from '@/data/destinations';
 import DestinationDropdown from './DestinationDropdown';
 import DestinationSlice from './DestinationSlice';
-import { getPathD, getCenterPoint } from '@/utils/pathUtils';
+import { getPathD, getCenterPoint } from '@/utils/path';
 
 interface PathInfo {
   d: string;
@@ -356,7 +356,7 @@ const Hero = memo(forwardRef<HTMLDivElement>((props, ref) => {
               <div className="md:w-1/3">
                 <h2 className="text-2xl sm:text-3xl font-semibold mb-4">Trip Summary</h2>
                 <p className="text-base sm:text-sm text-gray-700 mb-4">
-                  Imagine waking up in {destinationsToShow.map(d => d.name).join(', ')} over the next {totalNightsValue} days—sunrise to sunset adventures await! Share a bit about yourself below, and we'll craft a personalized journey you'll never forget.
+                  Imagine waking up in {destinationsToShow.map(d => d.name).join(', ')} over the next {totalNightsValue} days—sunrise to sunset adventures await! Share a bit about yourself below, and we&apos;ll craft a personalized journey you&apos;ll never forget.
                 </p>
                 <div className="space-y-4">
                   {['Locations', 'Check In Date', 'Total travel days', 'People'].map((label, idx) => (

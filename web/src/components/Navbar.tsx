@@ -71,7 +71,7 @@ const Navbar = memo(() => {
             </div>
             
             {/* Desktop Navigation - Hidden on mobile */}
-            <nav className="hidden md:flex flex-1 justify-center pt-1">
+            <nav className="hidden md:flex flex-1 justify-center pt-0">
               <div className="flex items-center bg-white rounded-full px-4 lg:px-6 py-2 lg:py-3 shadow-lg">
                 <div className="flex items-center space-x-2 lg:space-x-4 text-sm font-medium">
                   {destinations.map((destination) => (

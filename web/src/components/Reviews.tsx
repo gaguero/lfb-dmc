@@ -1,7 +1,6 @@
 'use client';
 
 import React, { memo } from 'react';
-import Image from 'next/image';
 import { Star, Quote, MessageCircle } from 'lucide-react';
 
 const Reviews = memo(() => {
