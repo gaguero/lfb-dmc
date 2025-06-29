@@ -1,29 +1,30 @@
 import { renderHook } from '@testing-library/react';
 import { useDestinationContent } from './useDestinationContent';
-import * as DestinationContext from '../contexts/DestinationContext';
+import * as DestinationCompatibilityHooks from '../contexts/DestinationCompatibilityHooks';
+import { OptimizedDestinationProvider } from '../contexts/OptimizedDestinationProvider';
 import { destinations } from '../data/destinations';
 import { ReactNode } from 'react';
 
 const mockDestinations = destinations;
 
 // Mock the entire context module
-jest.mock('../contexts/DestinationContext', () => ({
+jest.mock('../contexts/DestinationCompatibilityHooks', () => ({
   __esModule: true,
-  ...jest.requireActual('../contexts/DestinationContext'), // import and retain default exports
+  ...jest.requireActual('../contexts/DestinationCompatibilityHooks'), // import and retain default exports
   useDestination: jest.fn(),
 }));
 
 const wrapper = ({ children }: { children: ReactNode }) => (
-  <DestinationContext.DestinationProvider>
+  <OptimizedDestinationProvider>
     {children}
-  </DestinationContext.DestinationProvider>
+  </OptimizedDestinationProvider>
 );
 
 describe('useDestinationContent', () => {
-  let mockUseDestination: jest.MockedFunction<typeof DestinationContext.useDestination>;
+  let mockUseDestination: jest.MockedFunction<typeof DestinationCompatibilityHooks.useDestination>;
 
   beforeEach(() => {
-    mockUseDestination = DestinationContext.useDestination as jest.MockedFunction<typeof DestinationContext.useDestination>;
+    mockUseDestination = DestinationCompatibilityHooks.useDestination as jest.MockedFunction<typeof DestinationCompatibilityHooks.useDestination>;
   });
 
   it('should return default content when no destination is selected', () => {

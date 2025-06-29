@@ -3,7 +3,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import Image from 'next/image';
 import { User, Menu, X } from 'lucide-react';
-import { usePrimaryDestination } from '@/contexts/DestinationContext';
+import { usePrimaryDestination } from '@/contexts/DestinationCompatibilityHooks';
 import { destinations } from '@/data/destinations';
 
 const Navbar = memo(() => {

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback, forwardRef, memo } from 'react';
 import { MapPin, Calendar, Search } from 'lucide-react';
-import { usePrimaryDestination, useDestination } from '@/contexts/DestinationContext';
+import { usePrimaryDestination, useDestination } from '@/contexts/DestinationCompatibilityHooks';
 import { useDestinationContent, usePerformance } from '@/hooks';
 import { destinations } from '@/data/destinations';
 import DestinationDropdown from './DestinationDropdown';

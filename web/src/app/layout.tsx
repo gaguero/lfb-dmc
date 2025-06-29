@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Epilogue, Karla } from "next/font/google";
 import "./globals.css";
-import { DestinationProvider } from "@/contexts/DestinationContext";
+import { OptimizedDestinationProvider } from "@/contexts/OptimizedDestinationProvider";
 import Footer from "@/components/Footer";
 
 const epilogue = Epilogue({
@@ -72,7 +72,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${epilogue.variable} ${karla.variable} font-sans bg-gray-50 antialiased touch-manipulation`}>
-        <DestinationProvider>
+        <OptimizedDestinationProvider>
           {/* Mobile-First Responsive Container */}
           <div className="w-full px-4 pt-4 sm:pt-6 md:pt-10">
             <div className="mx-auto shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-2xl border border-white/10 overflow-hidden" 
@@ -89,7 +89,7 @@ export default function RootLayout({
               </div>
             </div>
           </div>
-        </DestinationProvider>
+        </OptimizedDestinationProvider>
       </body>
     </html>
   );

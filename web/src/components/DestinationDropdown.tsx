@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Check, ChevronDown } from 'lucide-react';
 import { destinations } from '@/data/destinations';
-import { useDestination, usePrimaryDestination } from '@/contexts/DestinationContext';
+import { useDestination, usePrimaryDestination } from '@/contexts/DestinationCompatibilityHooks';
 
 /**
  * DestinationDropdown Component

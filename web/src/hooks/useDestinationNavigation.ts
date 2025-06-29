@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useDestination } from '../contexts/DestinationContext';
+import { useDestination } from '../contexts/DestinationCompatibilityHooks';
 import { Destination } from '../types/destination';
 import { destinations } from '../data/destinations';
 
