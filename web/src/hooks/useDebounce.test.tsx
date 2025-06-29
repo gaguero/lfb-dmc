@@ -135,7 +135,7 @@ describe('useDebouncedCallback', () => {
     const mockCallback2 = jest.fn();
     
     const { result, rerender } = renderHook(
-      ({ callback }) => useDebouncedCallback(callback, 500, [callback]),
+      ({ callback }) => useDebouncedCallback(callback, 500),
       {
         initialProps: { callback: mockCallback1 }
       }
@@ -161,7 +161,7 @@ describe('useDebouncedCallback', () => {
   });
 
   it('should preserve function signature and return type', () => {
-    const mockCallback = jest.fn((a: string, b: number) => `${a}-${b}`);
+    const mockCallback = jest.fn();
     const { result } = renderHook(() => useDebouncedCallback(mockCallback, 500));
 
     // TypeScript should infer the correct types

@@ -111,9 +111,9 @@ export const logError = (
   context: Partial<ErrorContext> = {}
 ): void => {
   const enhancedContext: ErrorContext = {
-    componentStack: errorInfo?.componentStack,
-    url: window.location.href,
-    userAgent: navigator.userAgent,
+    componentStack: errorInfo?.componentStack ?? undefined,
+    url: typeof window !== 'undefined' ? window.location.href : undefined,
+    userAgent: typeof window !== 'undefined' ? navigator.userAgent : undefined,
     timestamp: new Date().toISOString(),
     ...context,
   };
@@ -133,8 +133,9 @@ export const logError = (
 export const trackError = (error: Error, context: Partial<ErrorContext> = {}): void => {
   // This would integrate with your analytics service
   // For now, we'll log it for tracking purposes
-  if (typeof window !== 'undefined' && (window as Window & typeof globalThis & { gtag?: (...args: unknown[]) => void }).gtag) {
-    (window as Window & typeof globalThis & { gtag?: (...args: unknown[]) => void }).gtag('event', 'exception', {
+  const gtag = (window as Window & typeof globalThis & { gtag?: (...args: unknown[]) => void }).gtag;
+  if (typeof window !== 'undefined' && typeof gtag === 'function') {
+    gtag('event', 'exception', {
       description: error.message,
       fatal: false,
       error_boundary: context.errorBoundary || 'unknown',

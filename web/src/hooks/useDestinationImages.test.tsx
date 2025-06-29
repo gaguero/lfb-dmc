@@ -2,14 +2,25 @@ import { renderHook } from '@testing-library/react';
 import { useDestinationImages } from './useDestinationImages';
 import { Destination } from '../types/destination';
 
-// Mock destination for testing
+// Mock destination for testing - Updated to match the current Destination type
 const mockDestination: Destination = {
-  id: 'test-destination',
+  id: 'test-dest',
   name: 'Test Destination',
+  description: 'A place for testing.',
+  shortDescription: 'A short description.',
   image: '/test-image.jpg',
-  description: 'A test destination',
-  features: ['feature1', 'feature2'],
-  suggestedDuration: '3-4 days'
+  mobileImage: '/test-image-mobile.jpg',
+  theme: 'Test',
+  primaryActivities: ['testing', 'asserting'],
+  targetDuration: '1 day',
+  keyHighlights: ['Correct types', 'Passing tests'],
+};
+
+const mockDestinationWithoutImage: Destination = {
+  ...mockDestination,
+  id: 'no-image-dest',
+  image: '',
+  mobileImage: '',
 };
 
 describe('useDestinationImages', () => {
@@ -55,24 +66,19 @@ describe('useDestinationImages', () => {
   });
 
   describe('getOptimizedImageUrl', () => {
-    it('should return the original image URL', () => {
+    it('should return correct optimized image URLs', () => {
       const { result } = renderHook(() => useDestinationImages());
-      const url = result.current.getOptimizedImageUrl(mockDestination);
+      const imageUrl = result.current.getOptimizedImageUrl(mockDestination);
 
-      expect(url).toBe('/test-image.jpg');
+      // Currently, it just returns the original image string
+      expect(imageUrl).toBe(mockDestination.image);
     });
 
-    it('should handle different size parameters', () => {
+    it('should handle destinations without a valid imageUrl', () => {
       const { result } = renderHook(() => useDestinationImages());
-      
-      const smallUrl = result.current.getOptimizedImageUrl(mockDestination, 'small');
-      const mediumUrl = result.current.getOptimizedImageUrl(mockDestination, 'medium');
-      const largeUrl = result.current.getOptimizedImageUrl(mockDestination, 'large');
+      const imageUrl = result.current.getOptimizedImageUrl(mockDestinationWithoutImage);
 
-      // Currently returns original URL regardless of size
-      expect(smallUrl).toBe('/test-image.jpg');
-      expect(mediumUrl).toBe('/test-image.jpg');
-      expect(largeUrl).toBe('/test-image.jpg');
+      expect(imageUrl).toBe('');
     });
   });
 
