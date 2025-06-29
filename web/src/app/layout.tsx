@@ -3,6 +3,9 @@ import { Epilogue, Karla } from "next/font/google";
 import "./globals.css";
 import { OptimizedDestinationProvider } from "@/contexts/OptimizedDestinationProvider";
 import Footer from "@/components/Footer";
+import { LayoutErrorBoundary } from "@/components/ErrorBoundary";
+import GlobalErrorHandlerProvider from "@/components/GlobalErrorHandlerProvider";
+import ErrorBoundaryDemo from "@/components/ErrorBoundaryDemo";
 
 const epilogue = Epilogue({
   subsets: ["latin"],
@@ -72,24 +75,31 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${epilogue.variable} ${karla.variable} font-sans bg-gray-50 antialiased touch-manipulation`}>
-        <OptimizedDestinationProvider>
-          {/* Mobile-First Responsive Container */}
-          <div className="w-full px-4 pt-4 sm:pt-6 md:pt-10">
-            <div className="mx-auto shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-2xl border border-white/10 overflow-hidden" 
-                 style={{ width: '100%', maxWidth: '90%' }}>
-              {/* Subtle gradient overlay for depth */}
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-br from-white/2 via-transparent to-black/2 pointer-events-none"></div>
-                
-                {/* Main Content */}
-                <div className="relative z-10">
-                  {children}
-                  <Footer />
+        <GlobalErrorHandlerProvider>
+          <LayoutErrorBoundary>
+            <OptimizedDestinationProvider>
+              {/* Mobile-First Responsive Container */}
+              <div className="w-full px-4 pt-4 sm:pt-6 md:pt-10">
+                <div className="mx-auto shadow-[0_8px_32px_rgba(0,0,0,0.12)] rounded-2xl border border-white/10 overflow-hidden" 
+                     style={{ width: '100%', maxWidth: '90%' }}>
+                  {/* Subtle gradient overlay for depth */}
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-white/2 via-transparent to-black/2 pointer-events-none"></div>
+                    
+                    {/* Main Content */}
+                    <div className="relative z-10">
+                      {children}
+                      <Footer />
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </OptimizedDestinationProvider>
+            </OptimizedDestinationProvider>
+            
+            {/* Development Error Testing Tool */}
+            <ErrorBoundaryDemo />
+          </LayoutErrorBoundary>
+        </GlobalErrorHandlerProvider>
       </body>
     </html>
   );
