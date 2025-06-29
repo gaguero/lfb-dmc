@@ -113,10 +113,10 @@ const Reviews = memo(() => {
           <p className="text-driftwood-brown/80 mb-6">
             Ready to create your own story in Bocas del Toro?
           </p>
-          <button className="inline-flex items-center gap-2 bg-coral-pink text-white px-8 py-3 rounded-full font-semibold hover:bg-coral-pink/90 transition-colors">
+          <a href="https://wa.me/50769545262" className="inline-flex items-center gap-2 bg-coral-pink text-white px-8 py-3 rounded-full font-semibold hover:bg-coral-pink/90 transition-colors">
             <MessageCircle size={18} />
             Contact us on WhatsApp
-          </button>
+          </a>
         </div>
       </div>
     </section>
